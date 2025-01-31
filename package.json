@@ -1,0 +1,22 @@
+{
+  "name": "edap",
+  "version": "1.0.0",
+  "description": "enterprise data access portal",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EsmailSarwari/EDAP.git"
+  },
+  "keywords": [
+    "edap"
+  ],
+  "author": "maxx-energy-intern-team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EsmailSarwari/EDAP/issues"
+  },
+  "homepage": "https://github.com/EsmailSarwari/EDAP#readme"
+}
