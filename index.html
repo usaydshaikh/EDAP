@@ -1,141 +1,208 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maxx Energy Data Access Portal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxx Energy Portal</title>
+  <!-- Load Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Basic Reset & Styling */
+    /* Basic Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 20px;
+      background: url('https://www.biz2credit.com/blog/how-start-renewable-energy-company/') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      min-height: 100vh;
     }
-
-    h1 {
-      text-align: center;
-      color: #005792;
-      margin-bottom: 20px;
+    /* Overlay for better readability */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: -1;
     }
 
     /* Search Input Styling */
     #search-container {
       text-align: center;
-      margin-bottom: 20px;
     }
-
-    #searchInput {
-      padding: 10px;
-      width: 300px;
-      border: 1px solid #ccc;
+    .hidden { display: none; }
+    button {
+      padding: 10px 20px;
+      background: #005792;
+      color: #fff;
+      border: none;
       border-radius: 4px;
-      font-size: 16px;
+      cursor: pointer;
     }
-
-    /* Table Styling */
+    input {
+      padding: 8px;
+      margin: 5px;
+      width: 80%;
+      max-width: 300px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 0 auto;
-      max-width: 800px;
+      margin-top: 10px;
     }
-
     th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
+      padding: 8px;
       text-align: center;
-    }
-
-    th {
-      background-color: #005792;
-      color: #fff;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      #searchInput {
-        width: 90%;
-      }
     }
   </style>
 </head>
 <body>
-  <h1>Maxx Energy Data Access Portal</h1>
+  <div class="container">
+    <!-- Landing Page -->
+    <div id="landing">
+      <h1>Welcome to Maxx Energy</h1>
+      <p>Powering the future with renewable energy solutions.</p>
+      <button id="enterBtn">Enter Portal</button>
+    </div>
 
-  <!-- Search Input -->
-  <div id="search-container">
-    <input type="text" id="searchInput" placeholder="Search data..." />
+    <!-- Login Screen (hidden by default) -->
+    <div id="login" class="hidden">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginError" style="color: red;"></p>
+    </div>
+
+    <!-- Data Portal (hidden by default) -->
+    <div id="portal" class="hidden">
+      <h2 id="greeting"></h2>
+      <h3>Data Portal</h3>
+      <input type="text" id="search" placeholder="Search data">
+      <canvas id="chart" width="400" height="200" style="margin-top: 10px;"></canvas>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Plant</th>
+            <th>Output (MW)</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Data Table -->
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Plant</th>
-        <th>Energy Output (MW)</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody id="dataBody">
-      <!-- Data rows will be inserted here dynamically -->
-    </tbody>
-  </table>
-
   <script>
-    // Sample data array (could be fetched from a backend in a real-world scenario)
-    const energyData = [
-      { id: 1, plant: 'Solar Energy', energyOutput: 500, date: '2025-01-01' },
-      { id: 2, plant: 'Wind Plant', energyOutput: 750, date: '2025-01-02' },
-      { id: 3, plant: 'Hydro Station C', energyOutput: 600, date: '2025-01-03' },
-      { id: 4, plant: 'Geothermal Plant D', energyOutput: 300, date: '2025-01-04' },
-      { id: 5, plant: 'Solar Farm B', energyOutput: 450, date: '2025-01-05' }
-    ];
-
-    // Function to render the table rows based on provided data
-    function renderTable(data) {
-      const tbody = document.getElementById('dataBody');
-      tbody.innerHTML = ''; // Clear any existing rows
-
-      data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.id}</td>
-          <td>${item.plant}</td>
-          <td>${item.energyOutput}</td>
-          <td>${item.date}</td>
-        `;
-        tbody.appendChild(row);
+    document.addEventListener('DOMContentLoaded', function() {
+      // Credentials
+      const validUsername = 'admin';
+      const validPassword = 'password';
+      
+      // Sample data
+      const data = [
+        { id: 1, plant: "Solar Farm A", output: 500, date: "2025-01-01" },
+        { id: 2, plant: "Wind Plant B", output: 750, date: "2025-01-02" },
+        { id: 3, plant: "Hydro Station C", output: 600, date: "2025-01-03" },
+        { id: 4, plant: "Geothermal Plant D", output: 300, date: "2025-01-04" },
+        { id: 5, plant: "Solar Farm B", output: 450, date: "2025-01-05" }
+      ];
+      
+      // DOM elements
+      const landing = document.getElementById('landing');
+      const loginDiv = document.getElementById('login');
+      const portalDiv = document.getElementById('portal');
+      const enterBtn = document.getElementById('enterBtn');
+      const loginForm = document.getElementById('loginForm');
+      const loginError = document.getElementById('loginError');
+      const greeting = document.getElementById('greeting');
+      const searchInput = document.getElementById('search');
+      const tableBody = document.getElementById('tableBody');
+      const chartCanvas = document.getElementById('chart');
+      let chartInstance = null;
+      
+      // Show login when "Enter Portal" is clicked
+      enterBtn.addEventListener('click', () => {
+        landing.classList.add('hidden');
+        loginDiv.classList.remove('hidden');
       });
-    }
-
-    // Function to handle search/filtering
-    function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-
-      // Filter the data based on the search query (checks all columns)
-      const filteredData = energyData.filter(item => {
-        return (
+      
+      // Handle login form submission
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if(username === validUsername && password === validPassword) {
+          loginDiv.classList.add('hidden');
+          portalDiv.classList.remove('hidden');
+          greeting.textContent = "Hello " + username;
+          renderPortal(data);
+        } else {
+          loginError.textContent = "Invalid credentials.";
+        }
+      });
+      
+      // Render table rows
+      function renderTable(filteredData) {
+        tableBody.innerHTML = "";
+        filteredData.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${item.id}</td>
+                           <td>${item.plant}</td>
+                           <td>${item.output}</td>
+                           <td>${item.date}</td>`;
+          tableBody.appendChild(row);
+        });
+      }
+      
+      // Render Chart.js bar chart
+      function renderChart(filteredData) {
+        const labels = filteredData.map(item => item.plant);
+        const outputs = filteredData.map(item => item.output);
+        const ctx = chartCanvas.getContext('2d');
+        if(chartInstance) {
+          chartInstance.data.labels = labels;
+          chartInstance.data.datasets[0].data = outputs;
+          chartInstance.update();
+        } else {
+          chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Output (MW)',
+                data: outputs,
+                backgroundColor: 'rgba(0, 87, 146, 0.5)'
+              }]
+            },
+            options: {
+              scales: { y: { beginAtZero: true } }
+            }
+          });
+        }
+      }
+      
+      // Render portal (table and chart)
+      function renderPortal(filteredData) {
+        renderTable(filteredData);
+        renderChart(filteredData);
+      }
+      
+      // Filter data on search
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        const filtered = data.filter(item =>
           item.id.toString().includes(query) ||
           item.plant.toLowerCase().includes(query) ||
-          item.energyOutput.toString().includes(query) ||
+          item.output.toString().includes(query) ||
           item.date.includes(query)
         );
+        renderPortal(filtered);
       });
-
-      renderTable(filteredData);
-    }
-
-    // Attach event listener to search input for real-time filtering
-    document.getElementById('searchInput').addEventListener('input', handleSearch);
-
-    // Initial render of the full data table
-    renderTable(energyData);
+    });
   </script>
 </body>
 </html>
