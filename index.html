@@ -1,0 +1,141 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maxx Energy Data Access Portal</title>
+  <style>
+    /* Basic Reset & Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #005792;
+      margin-bottom: 20px;
+    }
+
+    /* Search Input Styling */
+    #search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #searchInput {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+      max-width: 800px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #005792;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #searchInput {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Maxx Energy Data Access Portal</h1>
+
+  <!-- Search Input -->
+  <div id="search-container">
+    <input type="text" id="searchInput" placeholder="Search data..." />
+  </div>
+
+  <!-- Data Table -->
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Plant</th>
+        <th>Energy Output (MW)</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="dataBody">
+      <!-- Data rows will be inserted here dynamically -->
+    </tbody>
+  </table>
+
+  <script>
+    // Sample data array (could be fetched from a backend in a real-world scenario)
+    const energyData = [
+      { id: 1, plant: 'Solar Energy', energyOutput: 500, date: '2025-01-01' },
+      { id: 2, plant: 'Wind Plant', energyOutput: 750, date: '2025-01-02' },
+      { id: 3, plant: 'Hydro Station C', energyOutput: 600, date: '2025-01-03' },
+      { id: 4, plant: 'Geothermal Plant D', energyOutput: 300, date: '2025-01-04' },
+      { id: 5, plant: 'Solar Farm B', energyOutput: 450, date: '2025-01-05' }
+    ];
+
+    // Function to render the table rows based on provided data
+    function renderTable(data) {
+      const tbody = document.getElementById('dataBody');
+      tbody.innerHTML = ''; // Clear any existing rows
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.id}</td>
+          <td>${item.plant}</td>
+          <td>${item.energyOutput}</td>
+          <td>${item.date}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Function to handle search/filtering
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+
+      // Filter the data based on the search query (checks all columns)
+      const filteredData = energyData.filter(item => {
+        return (
+          item.id.toString().includes(query) ||
+          item.plant.toLowerCase().includes(query) ||
+          item.energyOutput.toString().includes(query) ||
+          item.date.includes(query)
+        );
+      });
+
+      renderTable(filteredData);
+    }
+
+    // Attach event listener to search input for real-time filtering
+    document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+    // Initial render of the full data table
+    renderTable(energyData);
+  </script>
+</body>
+</html>
