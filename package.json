@@ -1,22 +1,23 @@
 {
   "name": "edap",
-  "version": "1.0.0",
-  "description": "enterprise data access portal",
-  "main": "app.js",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EsmailSarwari/EDAP.git"
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "mysql2": "^3.12.0"
   },
-  "keywords": [
-    "edap"
-  ],
-  "author": "maxx-energy-intern-team",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/EsmailSarwari/EDAP/issues"
-  },
-  "homepage": "https://github.com/EsmailSarwari/EDAP#readme"
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }
