@@ -9,11 +9,11 @@ import db from './config/db.js';
 import indexRouter from './routes/index.js';
 
 // database connection
-db.query('SELECT 1')
-    .then(() => console.log('Conntect to MySQL'))
-    .catch((err) => {
-        console.error('MySQL Connection Error:', err.message);
-    });
+// db.query('SELECT 1')
+//     .then(() => console.log('Conntect to MySQL'))
+//     .catch((err) => {
+//         console.error('MySQL Connection Error:', err.message);
+//     });
 
 const app = express();
 
