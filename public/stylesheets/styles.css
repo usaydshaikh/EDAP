@@ -1,44 +1,44 @@
-/* StartPage.css */
-.start-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #005792, #003f5c);
+/* public/style.css */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #f4f4f4;
+  /* Padding-top is handled by the container; the fixed navbar is 70px high */
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item img {
+  height: 90vh;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Footer styling */
+footer {
+  margin-top: 40px;
+}
+
+footer h4,
+footer p,
+.footer-bottom-links li a {
   color: #fff;
-  text-align: center;
-  margin: 0;
+}
+
+.footer-bottom-links {
+  list-style: none;
   padding: 0;
+  margin: 0;
+  display: inline-flex;
+  gap: 15px;
 }
 
-.start-page .content {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.start-page h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-
-.start-page p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-}
-
-.start-page button {
-  font-size: 1rem;
-  padding: 10px 20px;
-  background: #ff8c00;
-  border: none;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.start-page button:hover {
-  background: #e67e22;
+.modal-tabs {
+  margin-bottom: 0;
 }

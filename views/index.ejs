@@ -1,208 +1,229 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Maxx Energy Portal</title>
-  <!-- Load Chart.js from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    /* Basic Reset */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      background: url('https://www.biz2credit.com/blog/how-start-renewable-energy-company/') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      min-height: 100vh;
-    }
-    /* Overlay for better readability */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255, 255, 255, 0.85);
-      z-index: -1;
-    }
-
-    /* Search Input Styling */
-    #search-container {
-      text-align: center;
-    }
-    .hidden { display: none; }
-    button {
-      padding: 10px 20px;
-      background: #005792;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    input {
-      padding: 8px;
-      margin: 5px;
-      width: 80%;
-      max-width: 300px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS (via CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../public/stylesheets/style.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Landing Page -->
-    <div id="landing">
-      <h1>Welcome to Maxx Energy</h1>
-      <p>Powering the future with renewable energy solutions.</p>
-      <button id="enterBtn">Enter Portal</button>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <!-- Brand text only -->
+      <a class="navbar-brand" href="#" onclick="showSection('homeSection')">Maxx Energy</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <!-- Only these tabs are shown -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('homeSection')">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('serviceSection')">Service</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('aboutSection')">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('contactSection')">Contact</a></li>
+        </ul>
+        <!-- Search Form -->
+        <form class="d-flex me-3" onsubmit="event.preventDefault(); performSearch();">
+          <input class="form-control me-2" type="search" id="searchInput" placeholder="Search" required>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <!-- Authentication area (populated by JS) -->
+        <div id="authNav"></div>
+      </div>
     </div>
+  </nav>
 
-    <!-- Login Screen (hidden by default) -->
-    <div id="login" class="hidden">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-      </form>
-      <p id="loginError" style="color: red;"></p>
-    </div>
-
-    <!-- Data Portal (hidden by default) -->
-    <div id="portal" class="hidden">
-      <h2 id="greeting"></h2>
-      <h3>Data Portal</h3>
-      <input type="text" id="search" placeholder="Search data">
-      <canvas id="chart" width="400" height="200" style="margin-top: 10px;"></canvas>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Plant</th>
-            <th>Output (MW)</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+  <!-- Authentication Modal (Login/Register) -->
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- Modal Tabs for Login and Register -->
+          <ul class="nav nav-tabs" id="authTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#loginTabContent" type="button" role="tab" aria-controls="loginTabContent" aria-selected="true">Login</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#registerTabContent" type="button" role="tab" aria-controls="registerTabContent" aria-selected="false">Register</button>
+            </li>
+          </ul>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body tab-content">
+          <!-- Login Tab Content -->
+          <div class="tab-pane fade show active" id="loginTabContent" role="tabpanel" aria-labelledby="login-tab">
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required>
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+              </div>
+              <div class="mb-3 text-end">
+                <!-- Clicking "Forgot password?" shows the Password Reset section -->
+                <a href="#" onclick="showSection('passwordResetSection'); hideModal()">Forgot password?</a>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+          </div>
+          <!-- Register Tab Content -->
+          <div class="tab-pane fade" id="registerTabContent" role="tabpanel" aria-labelledby="register-tab">
+            <form id="registerForm">
+              <div class="mb-3">
+                <label for="registerName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="registerName" placeholder="Enter your full name" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="registerEmail" placeholder="Enter email" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+              </div>
+              <button type="submit" class="btn btn-success w-100">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Credentials
-      const validUsername = 'admin';
-      const validPassword = 'password';
-      
-      // Sample data
-      const data = [
-        { id: 1, plant: "Solar Farm A", output: 500, date: "2025-01-01" },
-        { id: 2, plant: "Wind Plant B", output: 750, date: "2025-01-02" },
-        { id: 3, plant: "Hydro Station C", output: 600, date: "2025-01-03" },
-        { id: 4, plant: "Geothermal Plant D", output: 300, date: "2025-01-04" },
-        { id: 5, plant: "Solar Farm B", output: 450, date: "2025-01-05" }
-      ];
-      
-      // DOM elements
-      const landing = document.getElementById('landing');
-      const loginDiv = document.getElementById('login');
-      const portalDiv = document.getElementById('portal');
-      const enterBtn = document.getElementById('enterBtn');
-      const loginForm = document.getElementById('loginForm');
-      const loginError = document.getElementById('loginError');
-      const greeting = document.getElementById('greeting');
-      const searchInput = document.getElementById('search');
-      const tableBody = document.getElementById('tableBody');
-      const chartCanvas = document.getElementById('chart');
-      let chartInstance = null;
-      
-      // Show login when "Enter Portal" is clicked
-      enterBtn.addEventListener('click', () => {
-        landing.classList.add('hidden');
-        loginDiv.classList.remove('hidden');
-      });
-      
-      // Handle login form submission
-      loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        if(username === validUsername && password === validPassword) {
-          loginDiv.classList.add('hidden');
-          portalDiv.classList.remove('hidden');
-          greeting.textContent = "Hello " + username;
-          renderPortal(data);
-        } else {
-          loginError.textContent = "Invalid credentials.";
-        }
-      });
-      
-      // Render table rows
-      function renderTable(filteredData) {
-        tableBody.innerHTML = "";
-        filteredData.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${item.id}</td>
-                           <td>${item.plant}</td>
-                           <td>${item.output}</td>
-                           <td>${item.date}</td>`;
-          tableBody.appendChild(row);
-        });
-      }
-      
-      // Render Chart.js bar chart
-      function renderChart(filteredData) {
-        const labels = filteredData.map(item => item.plant);
-        const outputs = filteredData.map(item => item.output);
-        const ctx = chartCanvas.getContext('2d');
-        if(chartInstance) {
-          chartInstance.data.labels = labels;
-          chartInstance.data.datasets[0].data = outputs;
-          chartInstance.update();
-        } else {
-          chartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: 'Output (MW)',
-                data: outputs,
-                backgroundColor: 'rgba(0, 87, 146, 0.5)'
-              }]
-            },
-            options: {
-              scales: { y: { beginAtZero: true } }
-            }
-          });
-        }
-      }
-      
-      // Render portal (table and chart)
-      function renderPortal(filteredData) {
-        renderTable(filteredData);
-        renderChart(filteredData);
-      }
-      
-      // Filter data on search
-      searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        const filtered = data.filter(item =>
-          item.id.toString().includes(query) ||
-          item.plant.toLowerCase().includes(query) ||
-          item.output.toString().includes(query) ||
-          item.date.includes(query)
-        );
-        renderPortal(filtered);
-      });
-    });
-  </script>
+  <!-- Main Content Container (Sections) -->
+  <div class="container mt-5 pt-5">
+    <!-- Home Section (Carousel/Slideshow) -->
+    <section id="homeSection">
+      <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <img src="https://images.unsplash.com/photo-1467533003447-e295ff1b0435?w=1600&auto=format&fit=crop&q=60" class="d-block w-100" alt="Energy Image 1">
+            <div class="carousel-caption d-none d-md-block">
+              <h2>Powering the Future</h2>
+              <p>Innovative energy solutions for a sustainable tomorrow.</p>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-item">
+            <img src="https://images.unsplash.com/photo-1413882353314-73389f63b6fd?w=1600&auto=format&fit=crop&q=60" class="d-block w-100" alt="Energy Image 2">
+            <div class="carousel-caption d-none d-md-block">
+              <h2>Innovative Technology</h2>
+              <p>Harnessing renewable energy to empower communities.</p>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="carousel-item">
+            <img src="https://images.unsplash.com/photo-1548613053-22087dd8edb8?w=1600&auto=format&fit=crop&q=60" class="d-block w-100" alt="Energy Image 3">
+            <div class="carousel-caption d-none d-md-block">
+              <h2>Clean &amp; Green</h2>
+              <p>Sustainable energy solutions for a better planet.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Service Section -->
+    <section id="serviceSection" class="d-none">
+      <h2>Our Services</h2>
+      <p>We offer innovative energy solutions and advanced technology for a sustainable future.</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="aboutSection" class="d-none">
+      <h2>About Us</h2>
+      <p>Maxxx Energy is dedicated to providing cutting-edge energy solutions that power the future.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contactSection" class="d-none">
+      <h2>Contact Us</h2>
+      <form id="contactForm">
+        <div class="mb-3">
+          <label for="contactName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="contactName" required>
+        </div>
+        <div class="mb-3">
+          <label for="contactEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="contactEmail" required>
+        </div>
+        <div class="mb-3">
+          <label for="contactMessage" class="form-label">Message</label>
+          <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+    </section>
+
+    <!-- Profile Section (visible only when logged in) -->
+    <section id="profileSection" class="d-none">
+      <h2>User Profile</h2>
+      <p>Welcome, <span id="profileUserName"></span>!</p>
+    </section>
+
+    <!-- Password Reset Section -->
+    <section id="passwordResetSection" class="d-none">
+      <h2>Password Reset</h2>
+      <form id="passwordResetForm">
+        <div class="mb-3">
+          <label for="resetEmail" class="form-label">Enter your email address</label>
+          <input type="email" class="form-control" id="resetEmail" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Reset Password</button>
+      </form>
+    </section>
+
+    <!-- Search Results Section -->
+    <section id="searchSection" class="d-none">
+      <h2>Search Results</h2>
+      <div id="searchResults"></div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white pt-4 pb-2 mt-5">
+    <div class="container text-center">
+      <h4>CONNECT WITH US ON SOCIAL MEDIA</h4>
+      <div class="social-icons">
+        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+      </div>
+      <div class="footer-bottom mt-2">
+        <ul class="footer-bottom-links list-inline">
+          <li class="list-inline-item"><a href="#" class="text-white">Terms & Conditions</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white">Privacy Notice</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white">Personal Information Request</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white">Copyright Act Policy</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white">Sitemap</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white">Browser Requirements</a></li>
+        </ul>
+        <p>&copy; 2025 Maxx Energy</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper (via CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script src="../public/javascripts/script.js"></script>
 </body>
 </html>
