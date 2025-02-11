@@ -1,0 +1,24 @@
+.navbar-brand img {
+    width: 150px;
+    height: auto;
+  }
+  
+  .navbar__btn.desktop {
+    display: flex;
+  }
+  
+  .button {
+    background: rgb(53, 59, 92);
+    padding: 16pm 32px;
+    border: none;
+    border-radius: 40px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .button:hover {
+    background: #3a5c88; 
+    transition: all 0.3s ease;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px #000000(0, 0, 0. 0.2);
+  }
