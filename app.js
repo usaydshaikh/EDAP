@@ -4,16 +4,23 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import 'dotenv/config';
 
-import db from './config/db.js';
-
-import indexRouter from './routes/index.js';
+import indexRouter from './routes/pagesRoute.js';
 
 // database connection
-// db.query('SELECT 1')
-//     .then(() => console.log('Conntect to MySQL'))
-//     .catch((err) => {
-//         console.error('MySQL Connection Error:', err.message);
-//     });
+
+import getDb from './config/db.js';
+
+const checkConnection = async () => {
+    try {
+        const db = await getDb(); // Get the db connection after the tunnel is established
+        await db.query('SELECT 1');
+        console.log('Connected to MySQL');
+    } catch (err) {
+        console.error('MySQL Connection Error:', err.message);
+    }
+};
+
+checkConnection(); // Check the connection
 
 const app = express();
 
