@@ -6,6 +6,7 @@ import * as pageController from '../controllers/pagesControllers.js';
 router.route('/').get(pageController.getIndextPage);
 router.route('/about').get(pageController.getAboutPage);
 router.route('/contact').get(pageController.getContactPage);
+router.route('/service').get(pageController.getServicesPage);
 router.route('*').get(pageController.getPageNotFound);
 
 export default router;

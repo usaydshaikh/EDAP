@@ -1,44 +1,4 @@
-/* public/style.css */
-body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: #f4f4f4;
-  /* Padding-top is handled by the container; the fixed navbar is 70px high */
-}
-
-.navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-item img {
-  height: 90vh;
-  object-fit: cover;
-}
-
-.carousel-caption {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-/* Footer styling */
-footer {
-  margin-top: 40px;
-}
-
-footer h4,
-footer p,
-.footer-bottom-links li a {
-  color: #fff;
-}
-
-.footer-bottom-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: inline-flex;
-  gap: 15px;
-}
-
-.modal-tabs {
-  margin-bottom: 0;
+.custom-carousel-image {
+    height: 500px; /* Adjust the height as per your requirement */
+    object-fit: cover; /* Ensures the image covers the container without distortion */
 }

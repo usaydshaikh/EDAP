@@ -10,6 +10,10 @@ export const getContactPage = (req, res) => {
     res.status(200).render('contact');
 };
 
+export const getServicesPage = (req, res) => {
+    res.status(200).render('services');
+};
+
 
 export const getPageNotFound = (req, res) => {
     res.status(404).send('<h1> Page Not Found </h1>');
