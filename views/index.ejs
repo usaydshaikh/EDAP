@@ -1,74 +1,6 @@
 <%- include('partials/_header.ejs') %>
     <%- include('partials/_navigator.ejs') %>
 
-        <!-- Login & Register Modal -->
-        <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- Modal Tabs for Login and Register -->
-                        <ul class="nav nav-tabs w-100" id="authTab" role="tablist">
-                            <li class="nav-item w-50" role="presentation">
-                                <button class="nav-link active w-100" id="login-tab" data-bs-toggle="tab"
-                                    data-bs-target="#loginTabContent" type="button" role="tab"
-                                    aria-controls="loginTabContent" aria-selected="true">Login</button>
-                            </li>
-                            <li class="nav-item w-50" role="presentation">
-                                <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab"
-                                    data-bs-target="#registerTabContent" type="button" role="tab"
-                                    aria-controls="registerTabContent" aria-selected="false">Register</button>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body tab-content">
-                        <!-- Login Tab Content -->
-                        <div class="tab-pane fade show active" id="loginTabContent" role="tabpanel"
-                            aria-labelledby="login-tab">
-                            <form id="loginForm">
-                                <div class="mb-3">
-                                    <label for="loginEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter email"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="loginPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="loginPassword"
-                                        placeholder="Password" required>
-                                </div>
-                                <div class="mb-3 text-end">
-                                    <a href="#">Forgot password?</a>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Login</button>
-                            </form>
-                        </div>
-                        <!-- Register Tab Content -->
-                        <div class="tab-pane fade" id="registerTabContent" role="tabpanel"
-                            aria-labelledby="register-tab">
-                            <form id="registerForm">
-                                <div class="mb-3">
-                                    <label for="registerName" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="registerName"
-                                        placeholder="Enter your full name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="registerEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="registerEmail"
-                                        placeholder="Enter email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="registerPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="registerPassword"
-                                        placeholder="Password" required>
-                                </div>
-                                <button type="submit" class="btn btn-success w-100">Register</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Main Content Container (Sections) -->
         <div class="container mt-5 pt-5 pb-5">
 
@@ -150,13 +82,11 @@
                 <div class="container">
                     <h3>Ready to Join Us?</h3>
                     <p>Get started today with our innovative energy solutions.</p>
-                    <a class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#authModal">Sing Up Now</a>
+                    <a class="btn btn-primary btn-lg" href="/login">Sign Up Now</a>
                 </div>
             </section>
 
         </div> <!-- End of Main Content Container -->
-
-
 
 
         <!-- Footer -->

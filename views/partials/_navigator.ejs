@@ -4,7 +4,7 @@
         <div class="container">
             <!-- Logo Brand -->
             <a class="navbar-brand" href="/">
-                <img src="images/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" style="height: 30px;">
+                <img src="/images/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" style="height: 30px;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
@@ -12,10 +12,18 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <!-- Navigation Links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/service">Service</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= page_name === 'index' && 'active' %>" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= page_name === 'services' && 'active' %>" href="/service">Service</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= page_name === 'about' && 'active' %>" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= page_name === 'contact' && 'active' %>" href="/contact">Contact</a>
+                    </li>
                 </ul>
                 <!-- Search Form -->
                 <form class="d-flex me-3">
@@ -23,8 +31,9 @@
                         required>
                     <button class="btn btn-outline-light rounded-pill px-3" type="submit">Search</button>
                 </form>
-                <button class="btn btn-outline-light" data-bs-toggle="modal"
-                    data-bs-target="#authModal">Login/Register</button>
+                <button class="btn btn-outline-light <%= page_name === 'login' && 'active' %>">
+                    <a class="nav-link " href="/login">Login/Register</a>
+                </button>
             </div>
         </div>
     </nav>
