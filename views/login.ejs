@@ -1,92 +1,119 @@
 <%- include('partials/_header.ejs') %>
     <%- include('partials/_navigator.ejs') %>
 
-        <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-            <div class="row w-75 shadow-lg rounded overflow-hidden">
-                <!-- Left Section: Visible only on large screens (lg and up) -->
-                <div
-                    class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center text-white bg-secondary p-4">
-                    <h2 class="mb-3">Welcome Back!</h2>
-                    <p class="text-center">Login to continue accessing your account</p>
-                    <form id="loginForm" class="w-100">
-                        <div class="mb-3">
-                            <label for="loginEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Password"
-                                required>
-                        </div>
-                        <button type="submit" class="btn btn-light w-100">Login</button>
-                    </form>
+        <% if (messages.success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                style="z-index: 1050; margin-top: 60px;">
+                <%= messages.success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <% if (messages.error) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                    style="z-index: 1050; margin-top: 60px;">
+                    <%= messages.error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <% } %>
 
-                <!-- Right Section (Desktop) / Mobile & Tablet View (With Tabs) -->
-                <div class="col-lg-6 bg-white p-4">
-                    <!-- Tab Navigation for Small & Medium Screens (Tablets & Mobile) -->
-                    <ul class="nav nav-tabs d-lg-none" id="authTabs" role="tablist">
-                        <li class="nav-item w-50" role="presentation">
-                            <button class="nav-link active w-100" id="login-tab" data-bs-toggle="tab"
-                                data-bs-target="#loginTabContent" type="button" role="tab"
-                                aria-controls="loginTabContent" aria-selected="true">Login</button>
-                        </li>
-                        <li class="nav-item w-50" role="presentation">
-                            <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab"
-                                data-bs-target="#registerTabContent" type="button" role="tab"
-                                aria-controls="registerTabContent" aria-selected="false">Register</button>
-                        </li>
-                    </ul>
 
-                    <!-- Tab Content (Mobile & Tablet) -->
-                    <div class="tab-content">
-                        <!-- Login Tab (Tablet & Mobile) -->
-                        <div class="tab-pane fade show active d-lg-none" id="loginTabContent" role="tabpanel"
-                            aria-labelledby="login-tab">
-                            <h2 class="mb-3 mt-3">Login</h2>
-                            <p>Login to continue accessing your account</p>
-                            <form id="loginFormMobile">
-                                <div class="mb-3">
-                                    <label for="loginEmailMobile" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="loginEmailMobile"
-                                        placeholder="Enter email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="loginPasswordMobile" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="loginPasswordMobile"
-                                        placeholder="Password" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Login</button>
-                            </form>
-                        </div>
 
-                        <!-- Register Tab (Tablet, Mobile & Desktop) -->
-                        <div class="tab-pane fade show d-lg-block" id="registerTabContent" role="tabpanel"
-                            aria-labelledby="register-tab">
-                            <h2 class="mb-3 mt-3">Create an Account</h2>
-                            <p>Join us today by registering below</p>
-                            <form id="registerForm">
-                                <div class="mb-3">
-                                    <label for="registerName" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="registerName"
-                                        placeholder="Enter full name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="registerEmail" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="registerEmail"
-                                        placeholder="Enter email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="registerPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="registerPassword"
-                                        placeholder="Password" required>
-                                </div>
-                                <button type="submit" class="btn btn-secondary w-100">Register</button>
-                            </form>
+            <div class="container d-flex justify-content-center align-items-center"
+                style="min-height: 80vh;">
+                <div class="row w-75 shadow-lg rounded overflow-hidden">
+                    <!-- Left Section: Visible only on large screens (lg and up) -->
+                    <div
+                        class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center text-white bg-secondary p-4">
+                        <h2 class="mb-3">Welcome Back!</h2>
+                        <p class="text-center">Login to continue accessing your account</p>
+                        <form id="loginForm" class="w-100" method="post" action="/users/login">
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="loginEmail"
+                                    placeholder="Enter email" name="email" value="admin@gmail.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword"
+                                    placeholder="Password" name="password" value="admin123">
+                            </div>
+                            <button type="submit" class="btn btn-light w-100">Login</button>
+                        </form>
+                    </div>
+
+                    <!-- Right Section (Desktop) / Mobile & Tablet View (With Tabs) -->
+                    <div class="col-lg-6 bg-white p-4">
+                        <!-- Tab Navigation for Small & Medium Screens (Tablets & Mobile) -->
+                        <ul class="nav nav-tabs d-lg-none" id="authTabs" role="tablist">
+                            <li class="nav-item w-50" role="presentation">
+                                <button class="nav-link active w-100" id="login-tab" data-bs-toggle="tab"
+                                    data-bs-target="#loginTabContent" type="button" role="tab"
+                                    aria-controls="loginTabContent" aria-selected="true">Login</button>
+                            </li>
+                            <li class="nav-item w-50" role="presentation">
+                                <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab"
+                                    data-bs-target="#registerTabContent" type="button" role="tab"
+                                    aria-controls="registerTabContent"
+                                    aria-selected="false">Register</button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab Content (Mobile & Tablet) -->
+                        <div class="tab-content">
+                            <!-- Login Tab (Tablet & Mobile) -->
+                            <div class="tab-pane fade show active d-lg-none" id="loginTabContent"
+                                role="tabpanel" aria-labelledby="login-tab">
+                                <h2 class="mb-3 mt-3">Login</h2>
+                                <p>Login to continue accessing your account</p>
+                                <form id="loginFormMobile" method="post" action="/users/login">
+                                    <div class="mb-3">
+                                        <label for="loginEmailMobile" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="loginEmailMobile"
+                                            placeholder="Enter email" name="email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPasswordMobile" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="loginPasswordMobile"
+                                            placeholder="Password" name="password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                                </form>
+                            </div>
+
+                            <!-- Register Tab (Tablet, Mobile & Desktop) -->
+                            <div class="tab-pane fade show d-lg-block" id="registerTabContent"
+                                role="tabpanel" aria-labelledby="register-tab">
+                                <h2 class="mb-3 mt-3">Create an Account</h2>
+                                <p>Join us today by registering below</p>
+                                <form id="registerForm" name="registerForm" action="/users/register"
+                                    method="post">
+                                    <div class="mb-3">
+                                        <label for="registerFirstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="registerFirstName"
+                                            placeholder="Enter first name" name="firstName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerLastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="registerLastName"
+                                            placeholder="Enter last name" name="lastName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="registerEmail"
+                                            placeholder="Enter email" name="email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="registerPassword"
+                                            placeholder="Password" name="password">
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary w-100">Register</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <%- include('partials/_footer.ejs') %>
+            <%- include('partials/_footer.ejs') %>

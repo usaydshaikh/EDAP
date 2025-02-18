@@ -1,13 +1,17 @@
 import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
+import methodOverride from 'method-override';
 import logger from 'morgan';
+import flash from 'connect-flash';
+import session from 'express-session';
 import 'dotenv/config';
 
 import indexRouter from './routes/pagesRoute.js';
+import authRoutes from './routes/authRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js'
 
 // database connection
-
 import getDb from './config/db.js';
 
 const checkConnection = async () => {
@@ -19,7 +23,6 @@ const checkConnection = async () => {
         console.error('MySQL Connection Error:', err.message);
     }
 };
-
 checkConnection(); // Check the connection
 
 const app = express();
@@ -27,12 +30,38 @@ const app = express();
 // view engine setup
 app.set('view engine', 'ejs');
 
+// configuration
 app.use(logger('dev'));
-app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(express.json());
+app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
+app.use(
+    methodOverride('_method', {
+        methods: ['POST', 'GET'],
+    })
+);
+app.use(
+    session({
+        secret: process.env.FLASH_SECRET_KEY,
+        resave: false,
+        saveUninitialized: true,
+        cookie: { maxAge: 600000 },
+    })
+);
+app.use(flash());
 
+// Routes
+app.use((req, res, next) => {
+    res.locals.messages = req.flash();
+    next();
+});
+app.use('*', (req, res, next) => {
+    res.locals.isUserSignedIn = req.session.userID;
+    next();
+});
+app.use('/dashboard', dashboardRoutes);
+app.use('/users', authRoutes);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

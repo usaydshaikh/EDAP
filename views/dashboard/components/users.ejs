@@ -1,0 +1,92 @@
+<? if (isUserSignedIn) { ?>
+<%- include('../dashboardPartials/_dashboardHeader.ejs') %>
+
+    <div class="container mt-5 table-responsive">
+        <h2 class="text-center">User List</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through users and display their data -->
+                <% users.forEach(user=> { %>
+                    <tr>
+                        <td>
+                            <%= user.employee_id %>
+                        </td>
+                        <td>
+                            <%= user.first_name %>
+                        </td>
+                        <td>
+                            <%= user.last_name %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <% if (totalPages> 0) { %>
+                <ul class="pagination">
+
+                    <!-- Previous Button -->
+                    <li class="page-item <%= current === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="<%= current > 1 ? '/dashboard/users/?page=' + (current - 1) : '#' %>"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- First Page -->
+                    <% if (current> 2) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/dashboard/users/?page=1">1</a>
+                        </li>
+
+                    <% } %>
+
+                    <!-- Compact Page Numbers Around Current -->
+                    <% for (let i=Math.max(1, current - 1); i <=Math.min(totalPages, current + 1); i++) { %>
+                        <li class="page-item <%= i === current ? 'active' : '' %>">
+                            <a class="page-link" href="/dashboard/users/?page=<%= i %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <!-- Last Page -->
+                    <% if (current < totalPages - 1) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/dashboard/users/?page=<%= totalPages %>">
+                                <%= totalPages %>
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <!-- Next Button -->
+                    <li class="page-item <%= current === totalPages ? 'disabled' : '' %>">
+                        <a class="page-link"
+                            href="<%= current < totalPages ? '/dashboard/users/?page=' + (current + 1) : '#' %>"
+                            aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <% } %>
+        </nav>
+
+    </div>
+    </div>
+
+    <%- include('../dashboardPartials/_dashboardFooter.ejs') %>
+        <? } ?>
