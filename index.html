@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maxx Energy - Everything Integrated</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Google Font: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Google Custom Search Script (if needed) -->
+  <script async src="https://cse.google.com/cse.js?cx=a3e7ce1b016a34ed4"></script>
+</head>
+<body class="dark-mode">
+
+  <div class="page-wrapper">
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <div class="nav-left">
+        <!-- Logo toggles dark/light mode -->
+        <img src="assets/Branding/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" class="logo" id="toggleDarkModeBtn">
+        <nav class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+          <a href="#">Dashboard</a>
+        </nav>
+      </div>
+      <div class="nav-right">
+        <!-- Single Search Bar -->
+        <div class="search-container">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search energy rates...">
+          <button id="searchBtn">🔍</button>
+        </div>
+        <!-- Language Toggle -->
+        <button class="lang-btn" id="langToggleBtn">EN</button>
+        <!-- Sign In Button -->
+        <button class="sign-in-btn" id="signInBtn">Sign In</button>
+      </div>
+    </header>
+
+    <!-- HERO SECTION (Slideshow) -->
+    <main class="hero-section">
+      <div class="hero-overlay">
+        <h1 id="mainTitle">Empowering Your Energy Future</h1>
+        <p id="mainSubtitle">Join us in building sustainable solutions for tomorrow.</p>
+      </div>
+      <div class="slideshow-container">
+        <img id="slideshowImg" src="assets/Slideshow/1.jpeg" alt="Slideshow Image" class="hero-image">
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-left">
+        <p><strong>Maxx Energy</strong></p>
+        <p>&copy; 2025 All Rights Reserved</p>
+      </div>
+      
+      <div class="footer-right">
+        <a href="https://facebook.com" target="_blank">Facebook</a>
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+      </div>
+    </footer>
+    
+  </div>
+
+  <!-- SIGN-IN MODAL (Login / Register / Newsletter) -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+      <div class="modal-header">
+        <img src="assets/Branding/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" class="modal-logo">
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="loginForm">Login</button>
+        <button class="auth-tab" data-tab="registerForm">Register</button>
+        <button class="auth-tab" data-tab="newsletterForm">Newsletter</button>
+      </div>
+      <div class="auth-content">
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form">
+          <h2>Welcome Back</h2>
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          <button type="submit" class="login-submit-btn">Log In</button>
+        </form>
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form hidden">
+          <h2>Create an Account</h2>
+          <label>Email</label>
+          <input type="email" id="registerEmail" placeholder="Enter your email" required>
+          <label>Password</label>
+          <input type="password" id="registerPassword" placeholder="Enter your password" required>
+          <label>Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+          <button type="submit" class="login-submit-btn">Register</button>
+        </form>
+        <!-- Newsletter Form -->
+        <form id="newsletterForm" class="auth-form hidden">
+          <h2>Join Our Newsletter</h2>
+          <label>Email</label>
+          <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+          <button type="submit" class="login-submit-btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI HELP BUTTON -->
+  <button class="ai-help-btn" id="aiHelpBtn">AI Help</button>
+
+  <!-- AI HELP MODAL -->
+  <div class="modal-overlay" id="aiModal">
+    <div class="modal-content ai-widget">
+      <button class="modal-close-btn" id="closeAiBtn">&times;</button>
+      <h3>AI Help Agent</h3>
+      <div class="chat-window" id="chatWindow"></div>
+      <div class="chat-input">
+        <input type="text" id="aiInput" placeholder="Type 'search for [X]' or ask me anything...">
+        <button id="aiSendBtn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-Side Script -->
+  <script src="js/script.js"></script>
+</body>
+</html>
