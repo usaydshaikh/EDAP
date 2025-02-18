@@ -1,43 +1,32 @@
-<body class="d-flex flex-column min-vh-100">
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+<body class="d-flex flex-column min-vh-100 bg-light text-dark"> <!-- Ensures sticky footer -->
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <!-- Logo Brand -->
             <a class="navbar-brand" href="/">
-                <img src="/images/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" style="height: 30px;">
+                <img src="/images/MAXX-Energy-Logo-1B.png" alt="Maxx Energy Logo" width="120">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Navigation Links -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link <%= page_name === 'index' && 'active' %>" href="/">Home</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link <%= page_name === 'index' && 'active' %>" href="/">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= page_name === 'services' && 'active' %>" href="/service">Service</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= page_name === 'about' && 'active' %>" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= page_name === 'contact' && 'active' %>" href="/contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= page_name === 'faq' && 'active' %>" href="/faq">FAQ</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link <%= page_name === 'about' && 'active' %>"
+                            href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link <%= page_name === 'services' && 'active' %>"
+                            href="/service">Services</a></li>
+                    <li class="nav-item"><a class="nav-link <%= page_name === 'contact' && 'active' %>"
+                            href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link <%= page_name === 'faq' && 'active' %>"
+                            href="/faq">FAQ</a></li>
                 </ul>
-                <!-- Search Form -->
-                <form class="d-flex me-3">
-                    <input class="form-control me-2 rounded-pill" type="search" id="searchInput" placeholder="Search"
-                        required>
-                    <button class="btn btn-outline-light rounded-pill px-3" type="submit">Search</button>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-primary text-white" type="submit">Search</button>
                 </form>
-                <button class="btn btn-outline-light <%= page_name === 'login' && 'active' %>">
-                    <a class="nav-link " href="/login">Login/Register</a>
-                </button>
+                <a href="/login" class="btn btn-outline-primary text-white ms-2 <%= page_name === 'login' && 'active' %>">Sign In/Up</a>
             </div>
         </div>
     </nav>
-</body>

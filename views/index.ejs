@@ -1,93 +1,46 @@
 <%- include('partials/_header.ejs') %>
     <%- include('partials/_navigator.ejs') %>
 
-        <!-- Main Content Container (Sections) -->
-        <div class="container mt-5 pt-5 pb-5">
-
-            <!-- Home Section (Carousel/Slideshow) -->
-            <section id="homeSection" class="mb-5">
+        <!-- Main Content -->
+        <main class="flex-grow-1"> <!-- Makes sure content fills available space -->
+            <!-- Hero Section with Bootstrap Carousel -->
+            <section id="homeSection">
                 <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <!-- Slide 1 -->
                         <div class="carousel-item active">
-                            <img src="/images/1.jpeg" class="d-block w-100 custom-carousel-image" alt="Energy Image 1">
+                            <img src="/images/1.jpeg" class="d-block w-100 carousel-img" alt="Energy Image 1">
                             <div class="carousel-caption d-none d-md-block">
-                                <h2>Powering the Future</h2>
+                                <h1>Powering the Future</h1>
                                 <p>Innovative energy solutions for a sustainable tomorrow.</p>
                             </div>
                         </div>
-                        <!-- Slide 2 -->
                         <div class="carousel-item">
-                            <img src="/images/2.jpeg" class="d-block w-100 custom-carousel-image" alt="Energy Image 2">
+                            <img src="/images/2.jpeg" class="d-block w-100 carousel-img" alt="Energy Image 2">
                             <div class="carousel-caption d-none d-md-block">
-                                <h2>Innovative Technology</h2>
+                                <h1>Innovative Technology</h1>
                                 <p>Harnessing renewable energy to empower communities.</p>
                             </div>
                         </div>
-                        <!-- Slide 3 -->
                         <div class="carousel-item">
-                            <img src="/images/3.jpeg" class="d-block w-100 custom-carousel-image" alt="Energy Image 3">
+                            <img src="/images/3.jpeg" class="d-block w-100 carousel-img" alt="Energy Image 3">
                             <div class="carousel-caption d-none d-md-block">
-                                <h2>Clean &amp; Green</h2>
+                                <h1>Clean & Green</h1>
                                 <p>Sustainable energy solutions for a better planet.</p>
                             </div>
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel"
                         data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel"
                         data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
             </section>
+        </main>
 
-            <!-- About Section -->
-            <section id="aboutSection" class="text-center py-5">
-                <div class="container">
-                    <h2>About Us</h2>
-                    <p><strong>Maxx Energy</strong> is committed to delivering cutting-edge, sustainable energy
-                        solutions. We
-                        focus on providing renewable energy to improve the world, one community at a time.</p>
-                </div>
-            </section>
-
-            <!-- Features/Services Section -->
-            <section id="featuresSection" class="py-5 bg-light">
-                <div class="container">
-                    <h2 class="text-center">Our Services</h2>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h4>Renewable Energy Solutions</h4>
-                            <p>Harness the power of the sun and wind to meet your energy needs sustainably.</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h4>Smart Grid Technology</h4>
-                            <p>Our technology ensures efficient energy management and distribution.</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h4>Energy Storage Systems</h4>
-                            <p>Store energy for future use, ensuring reliable power at all times.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Call to Action Section -->
-            <section id="ctaSection" class="text-center py-5 bg-light mt-3">
-                <div class="container">
-                    <h3>Ready to Join Us?</h3>
-                    <p>Get started today with our innovative energy solutions.</p>
-                    <a class="btn btn-primary btn-lg" href="/login">Sign Up Now</a>
-                </div>
-            </section>
-
-        </div> <!-- End of Main Content Container -->
-
-
-        <!-- Footer -->
         <%- include('partials/_footer.ejs') %>

@@ -1,3 +1,4 @@
+/* dashboard */
 body {
     display: flex;
 }
@@ -56,8 +57,7 @@ body {
     }
 }
 
-/* LogOut Button */
-
+/* dashboard LogOut Button */
 .btn-logout {
     background-color: #f8f9fa;
     border: 1px solid #ccc;
