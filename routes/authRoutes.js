@@ -1,12 +1,19 @@
 import { Router } from 'express';
+import * as authController from '../controllers/authController.js';
+import {
+    validateRegistration,
+    validateLogin,
+    validateForgotPassword,
+    validateResetPassword,
+    handleValidationErrors,
+} from '../middlewares/validationMiddleware.js';
+
 const router = Router();
 
-import * as authController from '../controllers/authController.js';
-
-router.route('/register').post(authController.createUser);
-router.route('/login').post(authController.loginUser);
-router.route('/logout').post(authController.logoutUser);
-router.route('/forgot-password').post(authController.forgotPassword);
-router.route('/reset-password/:token').post(authController.resetPassword);
+router.post('/register', validateRegistration, handleValidationErrors('/register'), authController.registerUser);
+router.post('/login', validateLogin, handleValidationErrors('/login'), authController.loginUser);
+router.post('/logout', authController.logoutUser);
+router.post('/forgot-password', validateForgotPassword, handleValidationErrors('/forgot-password'), authController.forgotPassword);
+router.post('/reset-password/:token', validateResetPassword, handleValidationErrors('/reset-password/:token'), authController.resetPassword);
 
 export default router;
