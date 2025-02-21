@@ -1,6 +1,9 @@
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import User from '../models/usersModel.js';
+import sendEmail from '../utils/sendEmail.js';
+import * as emailTemplate from '../utils/emailTemplate.js';
 
 // User creation with validation
 export const createUser = [
@@ -8,7 +11,9 @@ export const createUser = [
     body('firstName').notEmpty().withMessage('First name is required').trim(),
     body('lastName').notEmpty().withMessage('Last name is required').trim(),
     body('email').isEmail().withMessage('Please provide a valid email').normalizeEmail(),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('password')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long'),
 
     async (req, res) => {
         const errors = validationResult(req);
@@ -100,3 +105,97 @@ export const logoutUser = async (req, res) => {
         res.redirect('/login');
     });
 };
+
+// Forgot Password - Generates reset token and sends an email
+export const forgotPassword = [
+    body('email').isEmail().withMessage('Please provide a valid email').normalizeEmail(),
+
+    // Form Validation
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.flash(
+                'error',
+                errors
+                    .array()
+                    .map((error) => error.msg)
+                    .join(' ')
+            );
+            return res.status(400).redirect('/forgot-password');
+        }
+
+        const user = await User.getUserByEmail(req.body.email);
+
+        if (!user) {
+            req.flash('error', 'User Not Found');
+            return res.status(404).redirect('/forgot-password');
+        }
+
+        try {
+            const resetToken = crypto.randomBytes(32).toString('hex');
+
+            // Generate token expiry time in UTC
+            const tokenExpiryUTC = new Date(Date.now() + 3600000).toISOString();
+
+            await User.storeResetToken(user.employee_id, resetToken, tokenExpiryUTC);
+
+            const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+            const emailContent = emailTemplate.resetPasswordTemplate(resetUrl);
+
+            const emailSent = await sendEmail(user.email, 'Password Reset Request', emailContent);
+
+            if (!emailSent) {
+                req.flash('error', 'Failed to send reset email. Please try again.');
+                return res.status(500).redirect('/forgot-password');
+            }
+
+            req.flash('success', 'Reset password link sent to your email');
+            res.status(200).redirect('/forgot-password');
+        } catch (error) {
+            console.error('Forgot Password Error:', error);
+            req.flash('error', 'Error processing request. Please try again.');
+            res.status(500).redirect('/forgot-password');
+        }
+    },
+];
+
+// Reset Password - Validates token and updates password
+export const resetPassword = [
+    body('password')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long'),
+
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.flash(
+                'error',
+                errors
+                    .array()
+                    .map((error) => error.msg)
+                    .join(' ')
+            );
+            return res.status(400).redirect(`/reset-password/${req.params.token}`);
+        }
+
+        const user = await User.getUserByResetToken(req.params.token);
+        console.log('is it id: ', user);
+
+        if (!user) {
+            req.flash('error', 'Invalid or expired token');
+            return res.status(400).redirect('/forgot-password');
+        }
+
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+            await User.updatePassword(user.employee_id, hashedPassword);
+            req.flash('success', 'Password reset successful. Please login.');
+            res.status(200).redirect('/login');
+        } catch (error) {
+            req.flash('error', 'Error resetting password');
+            res.status(500).redirect(`/reset-password/${req.params.token}`);
+        }
+    },
+];

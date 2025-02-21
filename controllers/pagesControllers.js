@@ -39,3 +39,15 @@ export const getPageNotFound = (req, res) => {
         page_name: '404',
     });
 };
+export const getForgotPasswordPage = (req, res) => {
+    res.status(200).render('forgot-password', {
+        page_name: 'forgot-password',
+    });
+};
+export const getResetPasswordPage = (req, res) => {
+    const token = req.params.token;
+    res.status(200).render('reset-password', {
+        page_name: 'reset-password',
+        token
+    });
+};
