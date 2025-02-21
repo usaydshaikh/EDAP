@@ -1,4 +1,4 @@
-export const getIndextPage = (req, res) => {
+export const getIndexPage = (req, res) => {
     res.status(200).render('index', {
         page_name: 'index',
     });

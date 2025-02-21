@@ -65,7 +65,7 @@ class User {
     }
 
     static async getUserByResetToken(token) {
-        const query = ` SELECT employee_id FROM users WHERE reset_password_token = ? AND reset_password_expires > CONVERT_TZ(NOW(), '+00:00', 'SYSTEM')`;
+        const query = `SELECT employee_id FROM users WHERE reset_password_token = ? AND reset_password_expires > CONVERT_TZ(NOW(), '+00:00', 'SYSTEM')`;
 
         try {
             if (!token || typeof token !== 'string') {
@@ -73,7 +73,6 @@ class User {
             }
             const db = await getDb();
             const [[user]] = await db.query(query, [token]);
-            console.log('inside the model: ', user);
             return user || null;
         } catch (error) {
             console.error('Error fetching user by reset token:', error.message);

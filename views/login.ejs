@@ -1,8 +1,7 @@
 <%- include('partials/_header.ejs') %>
     <%- include('partials/_navigator.ejs') %>
 
-        <div class="container d-flex justify-content-center align-items-center"
-            style="min-height: 80vh;">
+        <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
             <div class="row w-75 shadow-lg rounded overflow-hidden">
                 <% if (messages.success) { %>
                     <div class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 1050;">
@@ -22,7 +21,7 @@
                     class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center text-white bg-secondary p-4">
                     <h2 class="mb-3">Welcome Back!</h2>
                     <p class="text-center">Login to continue accessing your account</p>
-                    <form id="loginForm" class="w-100" method="post" action="/users/login">
+                    <form id="loginForm" class="w-100" method="post" action="/auth/login">
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="loginEmail"
@@ -64,7 +63,7 @@
                             role="tabpanel" aria-labelledby="login-tab">
                             <h2 class="mb-3 mt-3">Login</h2>
                             <p>Login to continue accessing your account</p>
-                            <form id="loginFormMobile" method="post" action="/users/login">
+                            <form id="loginFormMobile" method="post" action="/auth/login">
                                 <div class="mb-3">
                                     <label for="loginEmailMobile" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="loginEmailMobile"
@@ -84,7 +83,7 @@
                             role="tabpanel" aria-labelledby="register-tab">
                             <h2 class="mb-3 mt-3">Create an Account</h2>
                             <p>Join us today by registering below</p>
-                            <form id="registerForm" name="registerForm" action="/users/register"
+                            <form id="registerForm" name="registerForm" action="/auth/register"
                                 method="post">
                                 <div class="mb-3">
                                     <label for="registerFirstName" class="form-label">First Name</label>

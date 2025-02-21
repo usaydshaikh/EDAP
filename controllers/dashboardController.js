@@ -1,76 +1,70 @@
 import User from '../models/usersModel.js';
 
-export const getDashboard = async (req, res) => {
-    try {
-        // get the loggedin user Id from the session and send the dashboard page
-        const isUserSignedIn = req.session.userID;
+// Utility function for rendering pages with user session status
+const renderPage = (res, page, isUserSignedIn, data = {}) => {
+    res.status(200).render(page, { isUserSignedIn, ...data });
+};
 
-        res.status(200).render('dashboard/dashboard', {
-            isUserSignedIn,
-        });
+// Dashboard
+export const getDashboard = async (req, res, next) => {
+    try {
+        const isUserSignedIn = Boolean(req.session.userID);
+        renderPage(res, 'dashboard/dashboard', isUserSignedIn);
     } catch (error) {
-        res.status(500).send('Error getting dashboard page: ' + error.message);
+        next(error);
     }
 };
 
-export const getUsers = async (req, res) => {
+// Users with pagination
+export const getUsers = async (req, res, next) => {
     const limit = 10;
-    let page = parseInt(req.query.page, 10) || 1;
+    let page = parseInt(req.query.page, 10);
+    page = isNaN(page) || page < 1 ? 1 : page; // Ensure page is a valid number
+
     const offset = (page - 1) * limit;
 
     try {
-        // get the loggedin user Id from the session and send the dashboard page
-        const isUserSignedIn = req.session.userID;
+        const isUserSignedIn = Boolean(req.session.userID);
         const users = await User.getUsers(limit, offset);
         const totalUsers = await User.getTotalUserCount();
         const totalPages = Math.ceil(totalUsers / limit);
 
-        res.status(200).render('dashboard/components/users', {
-            isUserSignedIn,
+        renderPage(res, 'dashboard/components/users', isUserSignedIn, {
             users,
             current: page,
             totalPages,
         });
     } catch (error) {
-        res.status(500).send('Error fetching users: ' + error.message);
+        next(error);
     }
 };
 
-export const getPerformance = async (req, res) => {
+// Performance
+export const getPerformance = async (req, res, next) => {
     try {
-        // get the loggedin user Id from the session and send the performance page
-        const isUserSignedIn = req.session.userID;
-
-        res.status(200).render('dashboard/components/performance', {
-            isUserSignedIn,
-        });
+        const isUserSignedIn = Boolean(req.session.userID);
+        renderPage(res, 'dashboard/components/performance', isUserSignedIn);
     } catch (error) {
-        res.status(500).send('Error getting performance page: ' + error.message);
+        next(error);
     }
 };
 
-export const getSupport = async (req, res) => {
+// Support
+export const getSupport = async (req, res, next) => {
     try {
-        // get the loggedin user Id from the session and send the support page
-        const isUserSignedIn = req.session.userID;
-
-        res.status(200).render('dashboard/components/support', {
-            isUserSignedIn,
-        });
+        const isUserSignedIn = Boolean(req.session.userID);
+        renderPage(res, 'dashboard/components/support', isUserSignedIn);
     } catch (error) {
-        res.status(500).send('Error getting support page: ' + error.message);
+        next(error);
     }
 };
 
-export const getAccount = async (req, res) => {
+// Account
+export const getAccount = async (req, res, next) => {
     try {
-        // get the loggedin user Id from the session and send the account page
-        const isUserSignedIn = req.session.userID;
-
-        res.status(200).render('dashboard/components/account', {
-            isUserSignedIn,
-        });
+        const isUserSignedIn = Boolean(req.session.userID);
+        renderPage(res, 'dashboard/components/account', isUserSignedIn);
     } catch (error) {
-        res.status(500).send('Error getting account page: ' + error.message);
+        next(error);
     }
 };

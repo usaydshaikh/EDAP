@@ -6,10 +6,11 @@ import logger from 'morgan';
 import flash from 'connect-flash';
 import session from 'express-session';
 import 'dotenv/config';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 import indexRouter from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
-import dashboardRoutes from './routes/dashboardRoutes.js'
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 // database connection
 import getDb from './config/db.js';
@@ -61,7 +62,7 @@ app.use('*', (req, res, next) => {
     next();
 });
 app.use('/dashboard', dashboardRoutes);
-app.use('/users', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -79,5 +80,8 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('error');
 });
+
+// Global Error Handler
+app.use(errorHandler);
 
 export default app;
