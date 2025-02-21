@@ -99,11 +99,22 @@ export const loginUser = [
     },
 ];
 
-// User logout
 export const logoutUser = async (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/login');
-    });
+    try {
+        // Destroy session and clear cookies
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Logout Error:', err);
+                return res.status(500).redirect('/dashboard');
+            }
+
+            res.clearCookie('connect.sid'); // Clear session cookie
+            res.redirect('/login'); // Redirect to login page where flash message will show
+        });
+    } catch (error) {
+        console.error('Unexpected Logout Error:', error);
+        res.status(500).redirect('/dashboard');
+    }
 };
 
 // Forgot Password - Generates reset token and sends an email
