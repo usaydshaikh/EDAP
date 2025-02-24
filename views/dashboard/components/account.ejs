@@ -5,7 +5,170 @@
         <h2 class="text-center">Your Account Settings</h2>
 
 
-
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>Your Account Settings</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            /* Basic Reset & Minimal Styling */
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              font-family: sans-serif;
+              background: #f9f9f9;
+              min-height: 100vh;
+              padding: 20px;
+              display: flex;
+              justify-content: center;
+              align-items: flex-start;
+            }
+            .container {
+              background: #fff;
+              border-radius: 8px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+              max-width: 900px;
+              width: 100%;
+              padding: 20px;
+            }
+            h1 {
+              font-size: 1.4rem;
+              margin-bottom: 20px;
+            }
+            /* Two-column layout */
+            .row {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 20px;
+            }
+            .column {
+              flex: 1;
+              min-width: 280px;
+            }
+            /* Labels & Inputs */
+            label {
+              display: block;
+              margin-bottom: 6px;
+              font-weight: 500;
+              color: #333;
+            }
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="file"] {
+              width: 100%;
+              padding: 8px;
+              margin-bottom: 12px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              font-size: 14px;
+            }
+            /* Profile Picture */
+            .profile-pic {
+              width: 150px;
+              height: 150px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 3px solid #ccc;
+              display: block;
+              margin-bottom: 12px;
+              transition: box-shadow 0.3s, transform 0.3s;
+              cursor: pointer; /* so user knows it's clickable */
+            }
+            .profile-pic:hover {
+              transform: scale(1.05);
+              box-shadow: 0 0 8px rgba(0,0,0,0.2);
+            }
+            /* Save Button */
+            .save-btn {
+              background: #4f46e5;
+              color: #fff;
+              border: none;
+              border-radius: 4px;
+              padding: 10px 24px;
+              font-size: 14px;
+              cursor: pointer;
+            }
+            .save-btn:hover {
+              background: #4338ca;
+            }
+            /* Divider */
+            hr {
+              border: none;
+              border-top: 1px solid #eee;
+              margin: 20px 0;
+            }
+            #profilePic {
+              display: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Your Account Settings</h1>
+            <div class="row">
+              <!-- Left Column: Profile Fields -->
+              <div class="column">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="Johnny Doe">
+        
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="johnny.doe@example.com">
+        
+                <hr>
+        
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" placeholder="********">
+        
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" placeholder="********">
+        
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="********">
+        
+                <button class="save-btn" id="saveBtn">Save</button>
+              </div>
+        
+              <!-- Right Column: Profile Picture (no label, bigger) -->
+              <div class="column" style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://picsum.photos/120" alt="Profile Picture" class="profile-pic" id="profilePicPreview">
+                <!-- The file input is hidden; user clicks the image to trigger it -->
+                <input type="file" id="profilePic" accept="image/*">
+              </div>
+            </div>
+          </div>
+        
+          <script>
+            // Demo "Save" button alert
+            document.getElementById('saveBtn').addEventListener('click', () => {
+              alert('Settings saved');
+            });
+        
+            // Clicking the picture opens the hidden file input
+            const profilePicPreview = document.getElementById('profilePicPreview');
+            const profilePicInput = document.getElementById('profilePic');
+            profilePicPreview.addEventListener('click', () => {
+              profilePicInput.click();
+            });
+        
+            // Preview new profile picture
+            profilePicInput.addEventListener('change', () => {
+              if (profilePicInput.files && profilePicInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                  profilePicPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(profilePicInput.files[0]);
+              }
+            });
+          </script>
+        </body>
+        </html>
+        
 
 
 
