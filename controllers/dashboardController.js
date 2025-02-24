@@ -62,8 +62,9 @@ export const getSupport = async (req, res, next) => {
 // Account
 export const getAccount = async (req, res, next) => {
     try {
+        const user = await User.getUserByEmployeeId(req.session.userID);
         const isUserSignedIn = Boolean(req.session.userID);
-        renderPage(res, 'dashboard/components/account', isUserSignedIn);
+        renderPage(res, 'dashboard/components/account', isUserSignedIn, { user });
     } catch (error) {
         next(error);
     }

@@ -36,9 +36,9 @@ export const validateLogin = [
 /**
  * Validation rules for forgot password request
  */
-export const validateForgotPassword = [body('email').isEmail().withMessage('Please provide a valid email').normalizeEmail(),];
+export const validateForgotPassword = [body('email').isEmail().withMessage('Please provide a valid email').normalizeEmail()];
 
 /**
  * Validation rules for resetting password
  */
-export const validateResetPassword = [body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),];
+export const validateResetPassword = [body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')];

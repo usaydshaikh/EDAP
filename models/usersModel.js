@@ -37,6 +37,18 @@ class User {
         }
     }
 
+    static async getUserByEmployeeId(id) {
+        const query =
+            'SELECT employee_id, first_name, last_name, email, password FROM users WHERE employee_id = ?';
+        try {
+            const db = await getDb();
+            const [[user]] = await db.query(query, [id]);
+            return user;
+        } catch (error) {
+            throw new Error('Error fetching user: ' + error.message);
+        }
+    }
+
     // Get Total User Count
     static async getTotalUserCount() {
         const query = 'SELECT COUNT(*) AS count FROM users';
