@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.post('/register', validateRegistration, handleValidationErrors('/register'), authController.registerUser);
+router.post('/register', validateRegistration, handleValidationErrors('/login'), authController.registerUser);
 router.post('/login', validateLogin, handleValidationErrors('/login'), authController.loginUser);
 router.post('/logout', authController.logoutUser);
 router.post('/forgot-password', validateForgotPassword, handleValidationErrors('/forgot-password'), authController.forgotPassword);

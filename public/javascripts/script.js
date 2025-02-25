@@ -1,3 +1,6 @@
+/**
+ * flash message timeout function
+ */
 setTimeout(function() {
     const alert = document.querySelector('.alert');
     if (alert) {

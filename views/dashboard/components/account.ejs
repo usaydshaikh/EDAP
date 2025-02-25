@@ -2,49 +2,55 @@
 <%- include('../dashboardPartials/_dashboardHeader.ejs') %>
 
     <div class="container mt-5">
-        <div class="container bg-white p-4 rounded shadow-lg">
-            <h1 class="mb-4 text-center">Your Account Settings</h1>
-            <form id="profileForm">
-                <div class="row g-4 align-items-center">
-                    <!-- Left Column: Profile Fields -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.first_name %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.last_name %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="<%= user.email %>" disabled>
-                        </div>
-                        <hr>
-                        <div class="mb-3">
-                            <label for="currentPassword" class="form-label">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="********">
-                        </div>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="********">
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="********">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Save Changes</button>
+        <h1 class="mb-4 text-center">Your Account Settings</h1>
+        <form id="profileForm">
+            <div class="row g-4 align-items-center">
+                <!-- Left Column: Profile Fields -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName"
+                            value="<%= user.first_name %>" required>
                     </div>
-
-                    <!-- Right Column: Profile Picture -->
-                    <div class="col-md-6 text-center">
-                        <img src="https://picsum.photos/150" alt="Profile Picture" class="img-thumbnail rounded-circle mb-3" id="profilePicPreview">
-                        <input type="file" class="form-control" id="profilePic" name="profilePic" accept="image/*">
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName"
+                            value="<%= user.last_name %>" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" value="<%= user.email %>" disabled>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+                            placeholder="********">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" name="newPassword"
+                            placeholder="********">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                            placeholder="********">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Save Changes</button>
                 </div>
-            </form>
-        </div>
+
+                <!-- Right Column: Profile Picture -->
+                <div class="col-md-6 text-center">
+                    <!-- Profile Picture (Clickable) -->
+                    <img src="https://picsum.photos/200/200" alt="Profile Picture"
+                        class="img-thumbnail rounded-circle mb-3" id="profilePicPreview" style="cursor: pointer;">
+                    <!-- Hidden File Input -->
+                    <input type="file" class="form-control d-none" id="profilePic" name="profilePic" accept="image/*">
+                </div>
+            </div>
+        </form>
     </div>
 
-<%- include('../dashboardPartials/_dashboardFooter.ejs') %>
-<? } ?>
+    <%- include('../dashboardPartials/_dashboardFooter.ejs') %>
+        <? } ?>

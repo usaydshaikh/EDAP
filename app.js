@@ -61,8 +61,8 @@ app.use('*', (req, res, next) => {
     res.locals.isUserSignedIn = req.session.userID;
     next();
 });
-app.use('/dashboard', dashboardRoutes);
 app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
