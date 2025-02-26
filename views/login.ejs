@@ -19,7 +19,7 @@
             <div class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center text-white bg-secondary p-4">
                 <h2 class="mb-3">Welcome Back!</h2>
                 <p class="text-center">Login to continue accessing your account</p>
-                <form id="loginForm" class="w-100" method="post" action="/auth/login">
+                <form id="loginForm" class="w-100" method="post" action="/auth/login/">
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label">Email</label>
                         <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" name="email">
@@ -59,16 +59,14 @@
                         role="tabpanel" aria-labelledby="login-tab">
                         <h2 class="mb-3 mt-3">Login</h2>
                         <p>Login to continue accessing your account</p>
-                        <form id="loginFormMobile" method="post" action="/auth/login">
+                        <form id="loginFormMobile" method="post" action="/auth/login/">
                             <div class="mb-3">
                                 <label for="loginEmailMobile" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="loginEmailMobile"
-                                    placeholder="Enter email" name="email">
+                                <input type="email" class="form-control" id="loginEmailMobile" placeholder="Enter email" name="email">
                             </div>
                             <div class="mb-3">
                                 <label for="loginPasswordMobile" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="loginPasswordMobile"
-                                    placeholder="Password" name="password">
+                                <input type="password" class="form-control" id="loginPasswordMobile" placeholder="Password" name="password">
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Login</button>
                         </form>

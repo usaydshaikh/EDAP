@@ -1,18 +1,34 @@
 import getDb from '../config/db.js';
 
 class User {
-    static async createUser(first_name, last_name, email, password) {
+    // Register new user
+    static async createUser(first_name, last_name, email, password, confirmation_token, token_expires_at) {
         const query =
-            'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
+            'INSERT INTO users (first_name, last_name, email, password, confirmation_token, token_expires_at) VALUES (?, ?, ?, ?, ?, ?)';
         try {
             const db = await getDb();
-            await db.execute(query, [first_name, last_name, email, password]);
+            await db.execute(query, [first_name, last_name, email, password, confirmation_token, token_expires_at]);
         } catch (error) {
             throw new Error('Error creating user: ' + error.message);
         }
     }
 
-    // Fetch Users with Pagination
+    // Get user by confirmation token
+    static async getUserByConfirmationToken(token) {
+        const query = `SELECT * FROM users WHERE confirmation_token = ? AND token_expires_at > CONVERT_TZ(NOW(), '+00:00', 'SYSTEM')`;
+        const db = await getDb();
+        const [users] = await db.execute(query, [token]);
+        return users.length ? users[0] : null;
+    }    
+
+    // Activate user account
+    static async activateUser(userId) {
+        const query = `UPDATE users SET is_active = 1, confirmation_token = NULL, token_expires_at = NULL WHERE employee_id = ?`;
+        const db = await getDb();
+        return db.execute(query, [userId]);
+    }
+
+    // Fetch all Users with Pagination
     static async getUsers(limit, offset) {
         const query =
             'SELECT employee_id, first_name, last_name, email FROM users ORDER BY employee_id DESC LIMIT ? OFFSET ?';
@@ -25,9 +41,10 @@ class User {
         }
     }
 
+    // Get selected user
     static async getUserByEmail(email) {
         const query =
-            'SELECT employee_id, first_name, last_name, email, password FROM users WHERE email = ?';
+            'SELECT employee_id, first_name, last_name, email, password, is_active FROM users WHERE email = ?';
         try {
             const db = await getDb();
             const [[user]] = await db.query(query, [email]);
@@ -36,7 +53,7 @@ class User {
             throw new Error('Error fetching user: ' + error.message);
         }
     }
-
+    //
     static async getUserByEmployeeId(id) {
         const query =
             'SELECT employee_id, first_name, last_name, email, password FROM users WHERE employee_id = ?';

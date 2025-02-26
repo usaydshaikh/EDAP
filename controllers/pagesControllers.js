@@ -27,7 +27,6 @@ export const getFaqPage = (req, res) => {
         page_name: 'faq',
     });
 };
-
 export const getLoginPage = (req, res) => {
     res.status(200).render('login', {
         page_name: 'login',
@@ -48,6 +47,6 @@ export const getResetPasswordPage = (req, res) => {
     const token = req.params.token;
     res.status(200).render('reset-password', {
         page_name: 'reset-password',
-        token
+        token,
     });
 };

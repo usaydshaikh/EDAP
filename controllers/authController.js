@@ -9,22 +9,70 @@ import * as emailTemplate from '../utils/emailTemplate.js';
  */
 export const registerUser = async (req, res) => {
     try {
+        // Check if user already exists
+        const existingUser = await User.getUserByEmail(req.body.email.toLowerCase());
+        if (existingUser) {
+            req.flash('error', 'Email is already registered.');
+            return res.status(400).redirect('/login');
+        }
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        const user = {
-            first_name: req.body.firstName,
-            last_name: req.body.lastName,
-            email: req.body.email.toLowerCase(),
-            password: hashedPassword,
-        };
+        // Generate confirmation token and expiry
+        const confirmationToken = crypto.randomBytes(32).toString('hex');
+        const tokenExpiryUTC = new Date(Date.now() + 24 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', ' '); // Convert to MySQL DATETIME format
 
-        await User.createUser(user.first_name, user.last_name, user.email, user.password);
-        req.flash('success', 'Account created successfully. Please log in.');
+        // Create user in database
+        await User.createUser(
+            req.body.firstName,
+            req.body.lastName,
+            req.body.email.toLowerCase(),
+            hashedPassword,
+            confirmationToken,
+            tokenExpiryUTC
+        );
+
+        // Send confirmation email
+        const confirmUrl = `http://localhost:3000/auth/confirm-email/${confirmationToken}`;
+        const emailContent = emailTemplate.confirmationTemplate(confirmUrl);
+        await sendEmail(req.body.email.toLowerCase(), 'Confirm Your Email', emailContent);
+
+        req.flash(
+            'success',
+            'Account created successfully. Please check your email to confirm your account.'
+        );
         res.status(201).redirect('/login');
     } catch (error) {
-        console.error('Create User Error:', error);
+        console.error('Register User Error:', error);
         req.flash('error', 'Error creating account. Please try again.');
-        res.status(500).redirect('/register');
+        res.status(500).redirect('/login');
+    }
+};
+
+/**
+ * Confirm Email
+ */
+export const confirmEmail = async (req, res) => {
+    try {
+        const user = await User.getUserByConfirmationToken(req.params.token);
+
+        if (!user) {
+            req.flash('error', 'Invalid or expired confirmation link.');
+            return res.status(400).redirect('/login');
+        }
+
+        await User.activateUser(user.employee_id);
+
+        req.flash('success', 'Email confirmed successfully. You can now log in.');
+        res.redirect('/login');
+    } catch (error) {
+        console.error('Email Confirmation Error:', error);
+        req.flash('error', 'Error confirming email. Please try again.');
+        res.status(500).redirect('/login');
     }
 };
 
@@ -36,6 +84,11 @@ export const loginUser = async (req, res) => {
 
     if (!user) {
         req.flash('error', 'User not found.');
+        return res.status(404).redirect('/login');
+    }
+
+    if (user && user.is_active !== 1) {
+        req.flash('error', 'Please activate your account using the link sent to your email!');
         return res.status(404).redirect('/login');
     }
 

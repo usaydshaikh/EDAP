@@ -15,5 +15,7 @@ router.post('/login', validateLogin, handleValidationErrors('/login'), authContr
 router.post('/logout', authController.logoutUser);
 router.post('/forgot-password', validateForgotPassword, handleValidationErrors('/forgot-password'), authController.forgotPassword);
 router.post('/reset-password/:token', validateResetPassword, handleValidationErrors('/reset-password/:token'), authController.resetPassword);
+router.get('/confirm-email/:token', authController.confirmEmail);
+
 
 export default router;

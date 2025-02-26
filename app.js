@@ -8,7 +8,7 @@ import session from 'express-session';
 import 'dotenv/config';
 import { errorHandler } from './middlewares/errorHandler.js';
 
-import indexRouter from './routes/pagesRoute.js';
+import pageRoutes from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 
@@ -63,7 +63,7 @@ app.use('*', (req, res, next) => {
 });
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
-app.use('/', indexRouter);
+app.use('/', pageRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
