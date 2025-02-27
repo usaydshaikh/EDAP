@@ -1,39 +1,31 @@
-
 function search() {
-    const searchIn = document.getElementById("search").value.toLowerCase();
-    const faqs = document.querySelectorAll(".accordion-item");
-    
-    faqs.forEach(faq => {
-        const q = faq.querySelector(".accordion-button");
-        const a = faq.querySelector(".accordion-body");
+    const searchInput = document.getElementById('search').value.trim().toLowerCase();
+    const faqs = document.querySelectorAll('.accordion-item');
+    const noresults = document.getElementById('noresults');
+    let hasResults = false;
 
+    faqs.forEach((faq) => {
+        const question = faq.querySelector('.accordion-button')?.textContent.toLowerCase() || "";
+        const answer = faq.querySelector('.accordion-body')?.textContent.toLowerCase() || "";
 
-    if (q && a) {
-        const question = q.textContent.toLowerCase();
-        const answer = a.textContent.toLowerCase();
-        
-        if (question.includes(searchIn) || answer.includes(searchIn)) {
-            faq.style.display = "block";
-            noResults=false;
+        if (question.includes(searchInput) || answer.includes(searchInput)) {
+            faq.style.display = "";
+            hasResults = true;
         } else {
             faq.style.display = "none";
-            noResults=true;
         }
-    }
-});
-    const noResultsMsg = document.getElementById("noResultsMsg");
-if (noResults) {
-    if (!noResultsMsg) {
-        const msg = document.createElement("x");
-        msg.id = "noResultsMsg";
-        msg.style.color = "gray";
-        msg.textContent = "No results found.";
-        noresults.appendChild(msg);
-    }
-} else {
-    if (noResultsMsg) {
-        noResultsMsg.remove();
-        }
-}
-}
+    });
 
+    let noResultsMsg = document.getElementById('noResultsMsg');
+    if (!hasResults) {
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement('h1');
+            noResultsMsg.id = 'noResultsMsg';
+            noResultsMsg.style.color = 'gray';
+            noResultsMsg.textContent = 'No Results Found.';
+            noresults.appendChild(noResultsMsg);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
+    }
+}
