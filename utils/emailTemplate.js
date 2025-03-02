@@ -58,3 +58,45 @@ export const confirmationTemplate = (confirmUrl) => `
 </body>
 </html>
 `;
+
+export const replyMessageTemplate = (fullName, userMessage, adminReply) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Response to Your Inquiry</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>EDAP Support</h2>
+        </div>
+        <div class="card-body">
+            <p>Hello <strong>${fullName}</strong>,</p>
+            <p>Thank you for reaching out to us. Below is our response to your inquiry:</p>
+
+            <div class="alert alert-secondary">
+                <p><strong>Your message:</strong></p>
+                <blockquote class="blockquote mb-0">${userMessage}</blockquote>
+            </div>
+
+            <div class="alert alert-info">
+                <p><strong>Supports's reply:</strong></p>
+                <blockquote class="blockquote mb-0">${adminReply}</blockquote>
+            </div>
+
+            <p>If you have any further questions, feel free to contact us thorugh <a href="http://localhost:3000/contact" class="btn btn-success">Contact Support</a>.</p>
+        </div>
+        <div class="card-footer text-center text-muted">
+            &copy; 2025 EDAP. All rights reserved.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+`;

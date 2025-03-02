@@ -42,3 +42,10 @@ export const validateForgotPassword = [body('email').isEmail().withMessage('Plea
  * Validation rules for resetting password
  */
 export const validateResetPassword = [body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')];
+
+
+export const validateContactForm = [
+    body('fullName').notEmpty().withMessage('Full name is required').trim(),
+    body('email').isEmail().withMessage('Please provide a valid email').normalizeEmail(),
+    body('message').notEmpty().withMessage('Message is required').trim(),
+];

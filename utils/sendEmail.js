@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (recipientEmail, subject, content) => {
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail', // Use Gmail's service
@@ -12,9 +12,9 @@ const sendEmail = async (to, subject, text) => {
 
         const info = await transporter.sendMail({
             from: `"EDAP" <${process.env.EMAIL}>`, // Sender address
-            to: to, // Recipient email
+            to: recipientEmail, // Recipient email
             subject: subject, // Subject line
-            html: text, // HTML body
+            html: content, // HTML body
         });
 
         return info;

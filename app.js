@@ -11,6 +11,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import pageRoutes from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import contactMsgRoutes from './routes/contactMsgRoutes.js';
 
 // database connection
 import getDb from './config/db.js';
@@ -63,6 +64,7 @@ app.use('*', (req, res, next) => {
 });
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/contact-message', contactMsgRoutes);
 app.use('/', pageRoutes);
 
 // catch 404 and forward to error handler

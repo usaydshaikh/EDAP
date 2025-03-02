@@ -12,5 +12,6 @@ router.get('/performance', dashboardController.getPerformance);
 router.get('/support', dashboardController.getSupport);
 router.get('/users', dashboardController.getUsers);
 router.get('/account', dashboardController.getAccount);
+router.get('/contact-messages', dashboardController.getContactMessages);
 
 export default router;

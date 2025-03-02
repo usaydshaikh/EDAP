@@ -1,15 +1,16 @@
+import moment from 'moment';
 import User from '../models/usersModel.js';
+import ContactMessage from '../models/contactMsgModel.js';
 
-// Utility function for rendering pages with user session status
-const renderPage = (res, page, isUserSignedIn, data = {}) => {
-    res.status(200).render(page, { isUserSignedIn, ...data });
+// Utility function for rendering pages
+const renderPage = (res, page, data = {}) => {
+    res.status(200).render(page, { isUserSignedIn: res.locals.isUserSignedIn, ...data });
 };
 
 // Dashboard
 export const getDashboard = async (req, res, next) => {
     try {
-        const isUserSignedIn = Boolean(req.session.userID);
-        renderPage(res, 'dashboard/dashboard', isUserSignedIn);
+        renderPage(res, 'dashboard/dashboard');
     } catch (error) {
         next(error);
     }
@@ -19,17 +20,16 @@ export const getDashboard = async (req, res, next) => {
 export const getUsers = async (req, res, next) => {
     const limit = 10;
     let page = parseInt(req.query.page, 10);
-    page = isNaN(page) || page < 1 ? 1 : page; // Ensure page is a valid number
-
+    page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
 
     try {
-        const isUserSignedIn = Boolean(req.session.userID);
         const users = await User.getUsers(limit, offset);
         const totalUsers = await User.getTotalUserCount();
         const totalPages = Math.ceil(totalUsers / limit);
+        page = Math.min(page, totalPages || 1); // Ensure valid page number
 
-        renderPage(res, 'dashboard/components/users', isUserSignedIn, {
+        renderPage(res, 'dashboard/components/users', {
             users,
             current: page,
             totalPages,
@@ -42,8 +42,7 @@ export const getUsers = async (req, res, next) => {
 // Performance
 export const getPerformance = async (req, res, next) => {
     try {
-        const isUserSignedIn = Boolean(req.session.userID);
-        renderPage(res, 'dashboard/components/performance', isUserSignedIn);
+        renderPage(res, 'dashboard/components/performance');
     } catch (error) {
         next(error);
     }
@@ -52,8 +51,30 @@ export const getPerformance = async (req, res, next) => {
 // Support
 export const getSupport = async (req, res, next) => {
     try {
-        const isUserSignedIn = Boolean(req.session.userID);
-        renderPage(res, 'dashboard/components/support', isUserSignedIn);
+        renderPage(res, 'dashboard/components/support');
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Contact Messages
+export const getContactMessages = async (req, res, next) => {
+    try {
+        const userID = req.session.userID;
+        if (!userID) {
+            return res.redirect('/login'); // Redirect if not signed in
+        }
+
+        const user = await User.getUserByEmployeeId(userID);
+        let messages = (await ContactMessage.getAllMessages()) || [];
+
+        // Format created_at to show only date and time
+        messages = messages.map((msg) => ({
+            ...msg,
+            formattedDate: moment(msg.created_at).format('YYYY-MM-DD HH:mm:ss'),
+        }));
+
+        renderPage(res, 'dashboard/components/contactMessages', { messages, user });
     } catch (error) {
         next(error);
     }
@@ -62,9 +83,13 @@ export const getSupport = async (req, res, next) => {
 // Account
 export const getAccount = async (req, res, next) => {
     try {
-        const user = await User.getUserByEmployeeId(req.session.userID);
-        const isUserSignedIn = Boolean(req.session.userID);
-        renderPage(res, 'dashboard/components/account', isUserSignedIn, { user });
+        const userID = req.session.userID;
+        if (!userID) {
+            return res.redirect('/login');
+        }
+
+        const user = await User.getUserByEmployeeId(userID);
+        renderPage(res, 'dashboard/components/account', { user });
     } catch (error) {
         next(error);
     }
