@@ -2,19 +2,7 @@
 <%- include('partials/_navigator.ejs') %>
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="row w-75 shadow-lg rounded overflow-hidden">
-            <% if (messages.success) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 1050;">
-                    <%= messages.success %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% } %>
-
-            <% if (messages.error) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="z-index: 1050;">
-                    <%= messages.error %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <% } %>
+            
             <!-- Left Section: Visible only on large screens (lg and up) -->
             <div class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center text-white bg-secondary p-4">
                 <h2 class="mb-3">Welcome Back!</h2>

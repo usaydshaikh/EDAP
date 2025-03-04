@@ -1,12 +1,11 @@
 import getDb from '../config/db.js';
 
 class ContactMessage {
-    static async createMessage(fullName, email, message_content) {
-        const query = `INSERT INTO contact_messages (full_name, email, message_content) VALUES (?, ?, ?)`;
+    static async createMessage(userId = null, fullName, email, message) {
+        const query = `INSERT INTO contact_messages (user_id, full_name, email, message_content) VALUES (?, ?, ?, ?)`;
         try {
             const db = await getDb();
-            const [result] = await db.execute(query, [fullName, email, message_content]);
-            return result.insertId;
+            await db.execute(query, [userId, fullName, email, message]);
         } catch (error) {
             throw new Error('Error inserting contact message: ' + error.message);
         }
@@ -37,7 +36,11 @@ class ContactMessage {
     static async markAsReplied(replyContent, parent_message_id, messageId, repliedBy) {
         const query = `
             UPDATE contact_messages 
-            SET status = 'Replied', reply_content = ?, parent_message_id = ?, replied_by = ? 
+            SET status = 'Replied', 
+                reply_content = ?, 
+                parent_message_id = ?, 
+                replied_by = ?, 
+                replied_at = DATE_SUB(NOW(), INTERVAL 8 HOUR)  -- Adjust for timezone
             WHERE id = ?`;
         try {
             const db = await getDb();
@@ -46,7 +49,6 @@ class ContactMessage {
             throw new Error('Error updating contact message status: ' + error.message);
         }
     }
-    
 }
 
 export default ContactMessage;

@@ -4,7 +4,7 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Cutomer Inquiries</h2>
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-striped">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
@@ -40,20 +40,24 @@
                     </tr>
     
                     <!-- Unique Modal for each message -->
-                    <div class="modal fade" id="messageModal<%= message.id %>" tabindex="-1"
-                        aria-labelledby="messageModalLabel<%= message.id %>" aria-hidden="true">
+                    <div class="modal fade" id="messageModal<%= message.id %>" tabindex="-1" aria-labelledby="messageModalLabel<%= message.id %>" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="messageModalLabel<%= message.id %>">Message Details</h5>
+                                    <h5 class="modal-title" id="messageModalLabel<%= message.id %>">Message Details
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="mb-3">
-                                        <p><strong>Sender:</strong> <%= message.full_name %></p>
+                                        <p>
+                                            <strong>Sender:</strong> <%= message.full_name %> 
+                                            <span class="badge <%= message.user_id ? 'bg-success' : 'bg-danger' %>">
+                                                <%= message.user_id ? 'Registered User' : 'Guest User' %>
+                                            </span>
+                                        </p>
                                         <p><strong>Email:</strong> <%= message.email %></p>
-                                        <p><strong>Message:</strong></p>
-                                        <div class="alert alert-light p-3"><%= message.message_content %></div>
+                                        <p><strong>Message Content:</strong> <%= message.message_content %></p>
                                     </div>
                                     <% if (message.status === 'Pending') { %>
                                         <form action="/contact-message/reply-message/<%= message.id %>" method="POST">
@@ -62,16 +66,20 @@
                                                 <label for="replyContent<%= message.id %>" class="form-label">Your Reply</label>
                                                 <textarea class="form-control" id="replyContent<%= message.id %>" name="replyContent" rows="4" required></textarea>
                                             </div>
-                                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Send Reply</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <span class="d-md-flex justify-content-md-end">
+                                                <button type="submit" class="btn btn-success me-2"><i class="fas fa-paper-plane"></i> Send Reply</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </span>
                                         </form>
                                     <% } else { %>
-                                        <div class="alert alert-info p-3">
+                                        <div class="p-3 bg-body-secondary">
                                             <p><strong>Replied By:</strong> <%= user.first_name + ' ' + user.last_name %></p>
-                                            <p><strong>Reply:</strong></p>
-                                            <div class="alert alert-secondary"><%= message.reply_content %></div>
+                                            <p><strong>Replied At:</strong> <%= message.repliedFormattedDate %></p>
+                                            <p><strong>Reply Content:</strong> <%= message.reply_content %></p>
                                         </div>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <span class="d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+                                        </span>
                                     <% } %>
                                 </div>
                             </div>

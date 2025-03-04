@@ -9,8 +9,10 @@ const renderPage = (res, page, data = {}) => {
 
 // Dashboard
 export const getDashboard = async (req, res, next) => {
+    const userID = req.session.userID;
     try {
-        renderPage(res, 'dashboard/dashboard');
+        const user = await User.getUserByEmployeeId(userID);
+        renderPage(res, 'dashboard/dashboard', { user });
     } catch (error) {
         next(error);
     }
@@ -23,8 +25,10 @@ export const getUsers = async (req, res, next) => {
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
 
+    const userID = req.session.userID;
     try {
-        const users = await User.getUsers(limit, offset);
+        const user = await User.getUserByEmployeeId(userID); // logged in user
+        const users = await User.getUsers(limit, offset); // gets all users
         const totalUsers = await User.getTotalUserCount();
         const totalPages = Math.ceil(totalUsers / limit);
         page = Math.min(page, totalPages || 1); // Ensure valid page number
@@ -33,6 +37,7 @@ export const getUsers = async (req, res, next) => {
             users,
             current: page,
             totalPages,
+            user,
         });
     } catch (error) {
         next(error);
@@ -41,8 +46,10 @@ export const getUsers = async (req, res, next) => {
 
 // Performance
 export const getPerformance = async (req, res, next) => {
+    const userID = req.session.userID;
     try {
-        renderPage(res, 'dashboard/components/performance');
+        const user = await User.getUserByEmployeeId(userID);
+        renderPage(res, 'dashboard/components/performance', { user });
     } catch (error) {
         next(error);
     }
@@ -50,8 +57,10 @@ export const getPerformance = async (req, res, next) => {
 
 // Support
 export const getSupport = async (req, res, next) => {
+    const userID = req.session.userID;
     try {
-        renderPage(res, 'dashboard/components/support');
+        const user = await User.getUserByEmployeeId(userID);
+        renderPage(res, 'dashboard/components/support', { user });
     } catch (error) {
         next(error);
     }
@@ -59,22 +68,25 @@ export const getSupport = async (req, res, next) => {
 
 // Contact Messages
 export const getContactMessages = async (req, res, next) => {
+    const userID = req.session.userID;
     try {
-        const userID = req.session.userID;
-        if (!userID) {
-            return res.redirect('/login'); // Redirect if not signed in
-        }
-
         const user = await User.getUserByEmployeeId(userID);
         let messages = (await ContactMessage.getAllMessages()) || [];
 
-        // Format created_at to show only date and time
-        messages = messages.map((msg) => ({
+        // Format timestamps without modifying user_id
+        const updatedMessages = messages.map((msg) => ({
             ...msg,
-            formattedDate: moment(msg.created_at).format('YYYY-MM-DD HH:mm:ss'),
+            formattedDate: moment(msg.created_at).format('YYYY-MM-DD - HH:mm:ss'),
+            repliedFormattedDate: msg.replied_at
+                ? moment(msg.replied_at).format('YYYY-MM-DD - HH:mm:ss')
+                : null,
         }));
 
-        renderPage(res, 'dashboard/components/contactMessages', { messages, user });
+        // Render page
+        renderPage(res, 'dashboard/components/contactMessages', {
+            messages: updatedMessages,
+            user,
+        });
     } catch (error) {
         next(error);
     }
@@ -84,11 +96,13 @@ export const getContactMessages = async (req, res, next) => {
 export const getAccount = async (req, res, next) => {
     try {
         const userID = req.session.userID;
-        if (!userID) {
-            return res.redirect('/login');
+        const user = await User.getUserByEmployeeId(userID);
+        
+        // Ensure default profile picture
+        if (!user.profile_image || user.profile_image.trim() === '') {
+            user.profile_image = '/profile.png';
         }
 
-        const user = await User.getUserByEmployeeId(userID);
         renderPage(res, 'dashboard/components/account', { user });
     } catch (error) {
         next(error);

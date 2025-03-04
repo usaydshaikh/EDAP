@@ -2,12 +2,26 @@ import getDb from '../config/db.js';
 
 class User {
     // Register new user
-    static async createUser(first_name, last_name, email, password, confirmation_token, token_expires_at) {
+    static async createUser(
+        first_name,
+        last_name,
+        email,
+        password,
+        confirmation_token,
+        token_expires_at
+    ) {
         const query =
             'INSERT INTO users (first_name, last_name, email, password, confirmation_token, token_expires_at) VALUES (?, ?, ?, ?, ?, ?)';
         try {
             const db = await getDb();
-            await db.execute(query, [first_name, last_name, email, password, confirmation_token, token_expires_at]);
+            await db.execute(query, [
+                first_name,
+                last_name,
+                email,
+                password,
+                confirmation_token,
+                token_expires_at,
+            ]);
         } catch (error) {
             throw new Error('Error creating user: ' + error.message);
         }
@@ -19,13 +33,25 @@ class User {
         const db = await getDb();
         const [users] = await db.execute(query, [token]);
         return users.length ? users[0] : null;
-    }    
+    }
 
     // Activate user account
     static async activateUser(userId) {
         const query = `UPDATE users SET is_active = 1, confirmation_token = NULL, token_expires_at = NULL WHERE employee_id = ?`;
         const db = await getDb();
         return db.execute(query, [userId]);
+    }
+
+    static async updateUser(employee_id, first_name, last_name, profile_image) {
+        const query =
+            'UPDATE users SET first_name = ?, last_name = ?, profile_image = ? WHERE employee_id = ?';
+        try {
+            const db = await getDb();
+            await db.execute(query, [first_name, last_name, profile_image, employee_id]);
+        } catch (error) {
+            console.log('Error updating user:', error);
+            throw new Error('Error updating user: ' + error.message);
+        }
     }
 
     // Fetch all Users with Pagination
@@ -54,12 +80,12 @@ class User {
         }
     }
     //
-    static async getUserByEmployeeId(id) {
+    static async getUserByEmployeeId(employee_id) {
         const query =
-            'SELECT employee_id, first_name, last_name, email, password FROM users WHERE employee_id = ?';
+            'SELECT employee_id, first_name, last_name, email, password, profile_image FROM users WHERE employee_id = ?';
         try {
             const db = await getDb();
-            const [[user]] = await db.query(query, [id]);
+            const [[user]] = await db.query(query, [employee_id]);
             return user;
         } catch (error) {
             throw new Error('Error fetching user: ' + error.message);

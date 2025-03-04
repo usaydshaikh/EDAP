@@ -1,4 +1,5 @@
 import ContactMessage from '../models/contactMsgModel.js';
+import User from '../models/usersModel.js';
 import sendEmail from '../utils/sendEmail.js';
 import { replyMessageTemplate } from '../utils/emailTemplate.js';
 
@@ -7,7 +8,14 @@ export const saveContactMessage = async (req, res, next) => {
     try {
         const { fullName, email, message } = req.body;
 
-        await ContactMessage.createMessage(fullName, email, message);
+        // Check if user exists based on email
+        const existingUser = await User.getUserByEmail(email);
+        console.log(existingUser)
+        const userId = existingUser ? existingUser.employee_id : null;
+        console.log(userId);
+
+        // Save message with or without user_id
+        await ContactMessage.createMessage(userId, fullName, email, message);
 
         req.flash('success', 'Message sent successfully.');
         res.status(200).redirect('/contact');
@@ -17,6 +25,7 @@ export const saveContactMessage = async (req, res, next) => {
     }
 };
 
+
 // Reply to Contact Message
 export const replyToMessage = async (req, res, next) => {
     try {
@@ -24,7 +33,7 @@ export const replyToMessage = async (req, res, next) => {
         const repliedBy = req.session.userID;
         const { replyContent, parentMessageId} = req.body;
 
-        await ContactMessage.markAsReplied(replyContent.trim(), parentMessageId, messageID, repliedBy);
+        await ContactMessage.markAsReplied(replyContent, parentMessageId, messageID, repliedBy);
         const message = await ContactMessage.getMessageById(messageID);
 
         // Construct email content using the template

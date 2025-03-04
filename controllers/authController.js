@@ -111,6 +111,52 @@ export const loginUser = async (req, res) => {
 };
 
 /**
+ * Update Profile
+ */
+export const updateProfile = async (req, res) => {
+    try {
+        const { firstName, lastName, currentPassword, newPassword } = req.body;
+        const userId = req.session.userID;
+
+        // Fetch existing user data
+        const existingUser = await User.getUserByEmployeeId(userId);
+        if (!existingUser) {
+            req.flash('error', 'User not found.');
+            return res.status(404).redirect('/login');
+        }
+
+        // Password update logic
+        if (currentPassword && newPassword) {
+            const isMatch = await bcrypt.compare(currentPassword, existingUser.password);
+            if (!isMatch) {
+                req.flash('error', 'Current password is incorrect.');
+                return res.status(401).redirect('/dashboard/account');
+            }
+
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+            await User.updatePassword(userId, hashedNewPassword);
+        }
+
+        // Get profile image from req.file if uploaded
+        const updatedProfilePic = req.file ? req.file.filename : existingUser.profile_image;
+
+        // Use provided values or keep existing values
+        const updatedFirstName = firstName || existingUser.first_name;
+        const updatedLastName = lastName || existingUser.last_name;
+
+        // Update user profile
+        await User.updateUser(userId, updatedFirstName, updatedLastName, updatedProfilePic);
+
+        req.flash('success', 'Profile updated successfully.');
+        res.redirect('/dashboard/account');
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while updating your profile.');
+        res.status(500).redirect('/dashboard/account');
+    }
+};
+
+/**
  * Logout User
  */
 export const logoutUser = async (req, res) => {

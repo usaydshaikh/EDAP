@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import express, { json, urlencoded } from 'express';
+import express, {urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
 import logger from 'morgan';
