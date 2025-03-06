@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import moment from 'moment';
 import User from '../models/usersModel.js';
 import ContactMessage from '../models/contactMsgModel.js';
@@ -97,10 +99,13 @@ export const getAccount = async (req, res, next) => {
     try {
         const userID = req.session.userID;
         const user = await User.getUserByEmployeeId(userID);
-        
-        // Ensure default profile picture
-        if (!user.profile_image || user.profile_image.trim() === '') {
-            user.profile_image = '/profile.png';
+
+        const uploadDir = path.join('public', 'uploads');
+        const imagePath = path.join(uploadDir, user.profile_image);
+
+        // Check if the file exists
+        if (!user.profile_image || !fs.existsSync(imagePath)) {
+            user.profile_image = 'profile.png'; // Set default profile image
         }
 
         renderPage(res, 'dashboard/components/account', { user });

@@ -10,9 +10,7 @@ export const saveContactMessage = async (req, res, next) => {
 
         // Check if user exists based on email
         const existingUser = await User.getUserByEmail(email);
-        console.log(existingUser)
         const userId = existingUser ? existingUser.employee_id : null;
-        console.log(userId);
 
         // Save message with or without user_id
         await ContactMessage.createMessage(userId, fullName, email, message);
@@ -24,7 +22,6 @@ export const saveContactMessage = async (req, res, next) => {
         next(error); // Pass error to the error-handling middleware
     }
 };
-
 
 // Reply to Contact Message
 export const replyToMessage = async (req, res, next) => {
