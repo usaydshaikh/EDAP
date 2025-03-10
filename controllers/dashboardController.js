@@ -3,6 +3,7 @@ import fs from 'fs';
 import moment from 'moment';
 import User from '../models/usersModel.js';
 import ContactMessage from '../models/contactMsgModel.js';
+import exp from 'constants';
 
 // Utility function for rendering pages
 const renderPage = (res, page, data = {}) => {
@@ -11,10 +12,17 @@ const renderPage = (res, page, data = {}) => {
 
 // Dashboard
 export const getDashboard = async (req, res, next) => {
-    const userID = req.session.userID;
     try {
-        const user = await User.getUserByEmployeeId(userID);
-        renderPage(res, 'dashboard/dashboard', { user });
+        renderPage(res, 'dashboard/dashboard');
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Performance
+export const getPerformance = async (req, res, next) => {
+    try {
+        renderPage(res, 'dashboard/components/performance');
     } catch (error) {
         next(error);
     }
@@ -27,11 +35,9 @@ export const getUsers = async (req, res, next) => {
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
 
-    const userID = req.session.userID;
     try {
-        const user = await User.getUserByEmployeeId(userID); // logged in user
         const users = await User.getUsers(limit, offset); // gets all users
-        const totalUsers = await User.getTotalUserCount();
+        const totalUsers = await User.getTotalUserCount(); // total count of users
         const totalPages = Math.ceil(totalUsers / limit);
         page = Math.min(page, totalPages || 1); // Ensure valid page number
 
@@ -39,19 +45,7 @@ export const getUsers = async (req, res, next) => {
             users,
             current: page,
             totalPages,
-            user,
         });
-    } catch (error) {
-        next(error);
-    }
-};
-
-// Performance
-export const getPerformance = async (req, res, next) => {
-    const userID = req.session.userID;
-    try {
-        const user = await User.getUserByEmployeeId(userID);
-        renderPage(res, 'dashboard/components/performance', { user });
     } catch (error) {
         next(error);
     }
@@ -59,10 +53,8 @@ export const getPerformance = async (req, res, next) => {
 
 // Support
 export const getSupport = async (req, res, next) => {
-    const userID = req.session.userID;
     try {
-        const user = await User.getUserByEmployeeId(userID);
-        renderPage(res, 'dashboard/components/support', { user });
+        renderPage(res, 'dashboard/components/support');
     } catch (error) {
         next(error);
     }
@@ -70,9 +62,9 @@ export const getSupport = async (req, res, next) => {
 
 // Contact Messages
 export const getContactMessages = async (req, res, next) => {
-    const userID = req.session.userID;
     try {
-        const user = await User.getUserByEmployeeId(userID);
+        const loggedUser = req.session.user;
+        const user = await User.getUserByEmployeeId(loggedUser.id);
         let messages = (await ContactMessage.getAllMessages()) || [];
 
         // Format timestamps without modifying user_id
@@ -87,7 +79,7 @@ export const getContactMessages = async (req, res, next) => {
         // Render page
         renderPage(res, 'dashboard/components/contactMessages', {
             messages: updatedMessages,
-            user,
+            user
         });
     } catch (error) {
         next(error);
@@ -97,18 +89,18 @@ export const getContactMessages = async (req, res, next) => {
 // Account
 export const getAccount = async (req, res, next) => {
     try {
-        const userID = req.session.userID;
-        const user = await User.getUserByEmployeeId(userID);
+        const loggedUser = req.session.user;
+        const user = await User.getUserByEmployeeId(loggedUser.id);
 
-        const uploadDir = path.join('public', 'uploads');
-        const imagePath = path.join(uploadDir, user.profile_image);
-
-        // Check if the file exists
-        if (!user.profile_image || !fs.existsSync(imagePath)) {
-            user.profile_image = 'profile.png'; // Set default profile image
+        // Ensure a valid profile image path for rendering
+        if (!user.profile_image || !fs.existsSync(path.join('public', 'uploads', user.profile_image))) {
+            user.profile_image = 'profile.png'; // Fallback to default image
         }
 
-        renderPage(res, 'dashboard/components/account', { user });
+        // Construct the correct URL for the profile image
+        user.profile_image_url = `/uploads/${user.profile_image}`;
+
+        renderPage(res, 'dashboard/components/account', { user, loggedUser });
     } catch (error) {
         next(error);
     }

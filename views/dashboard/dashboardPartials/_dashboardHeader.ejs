@@ -23,8 +23,8 @@
         <a href="/dashboard">Dashboard</a>
         <a href="/dashboard/performance">Performance</a>
         <a href="/dashboard/support">Support</a>
-        <a href="/dashboard/users">Users</a>
-        <a href="/dashboard/contact-messages">Customer Inquiries</a>
+        <a href="/dashboard/users" class="<%= (isUserSignedIn.permissions >= 6) ? '' : 'd-none' %>">Users</a>
+        <a href="/dashboard/contact-messages" class="<%= (isUserSignedIn.permissions > 5) ? '' : 'd-none' %>">Customer Inquiries</a>
         <a href="/dashboard/account">Account</a>
     </div>
 
@@ -39,8 +39,7 @@
             <div class="d-flex align-items-center">
                 <a href="#" class="me-3 text-dark"><i class="fa fa-bell"></i></a>
                 <a href="/dashboard/account" class="me-2" style="width: 40px; height: 40px;">
-                    <img src="/uploads/<%= user.profile_image || 'profile.png' %>"
-                        class="rounded-circle img-fluid" alt="Profile"
+                    <img src="" class="rounded-circle img-fluid" alt="Profile"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 </a>
                 <form action="/auth/logout" method="POST"
@@ -51,3 +50,31 @@
                 </form>
             </div>
         </nav>
+
+
+        <!-- Toast Container for flash message - Start  -->
+        <div id="toast-container" class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 1050;">
+            <% if (messages.error) { %>
+                <div id="feedback-toast" class="toast align-items-center text-bg-danger" role="alert"
+                    aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <%= messages.error %>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const toastElement = document.getElementById('feedback-toast');
+                if (toastElement) {
+                    const toast = new bootstrap.Toast(toastElement);
+                    toast.show();
+                }
+            });
+        </script>
+        <!-- Toast Container for flash message - End  -->

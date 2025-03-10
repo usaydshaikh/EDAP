@@ -21,30 +21,18 @@ export const registerUser = async (req, res) => {
 
         // Generate confirmation token and expiry
         const confirmationToken = crypto.randomBytes(32).toString('hex');
-        const tokenExpiryUTC = new Date(Date.now() + 24 * 60 * 60 * 1000)
-            .toISOString()
-            .slice(0, 19)
-            .replace('T', ' '); // Convert to MySQL DATETIME format
+        // Convert to MySQL DATETIME format - 24 hours
+        const tokenExpiryUTC = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '); 
 
         // Create user in database
-        await User.createUser(
-            req.body.firstName,
-            req.body.lastName,
-            req.body.email.toLowerCase(),
-            hashedPassword,
-            confirmationToken,
-            tokenExpiryUTC
-        );
+        await User.createUser(req.body.firstName, req.body.lastName, req.body.email, hashedPassword, confirmationToken, tokenExpiryUTC);
 
         // Send confirmation email
         const confirmUrl = `http://localhost:3000/auth/confirm-email/${confirmationToken}`;
         const emailContent = emailTemplate.confirmationTemplate(confirmUrl);
         await sendEmail(req.body.email.toLowerCase(), 'Confirm Your Email', emailContent);
 
-        req.flash(
-            'success',
-            'Account created successfully. Please check your email to confirm your account.'
-        );
+        req.flash('success', 'Account created successfully. Please check your email to confirm your account.');
         res.status(201).redirect('/login');
     } catch (error) {
         console.error('Register User Error:', error);
@@ -80,29 +68,48 @@ export const confirmEmail = async (req, res) => {
  * Login User
  */
 export const loginUser = async (req, res) => {
-    const user = await User.getUserByEmail(req.body.email.toLowerCase());
-
-    if (!user) {
-        req.flash('error', 'User not found.');
-        return res.status(404).redirect('/login');
-    }
-
-    if (user && user.is_active !== 1) {
-        req.flash('error', 'Please activate your account using the link sent to your email!');
-        return res.status(404).redirect('/login');
-    }
-
     try {
+        const email = req.body.email.toLowerCase();
+        const user = await User.getUserByEmail(email);
+
+        if (!user) {
+            req.flash('error', 'User not found.');
+            return res.status(404).redirect('/login');
+        }
+
+        if (user.is_active !== 1) {
+            req.flash('error', 'Please activate your account using the link sent to your email!');
+            return res.status(403).redirect('/login');
+        }
+
         const isMatch = await bcrypt.compare(req.body.password, user.password);
 
-        if (isMatch) {
-            req.session.userID = user.employee_id;
-            req.flash('success', 'Login successful.');
-            return res.redirect('/dashboard');
-        } else {
+        if (!isMatch) {
             req.flash('error', 'Invalid password.');
             return res.status(401).redirect('/login');
         }
+
+        // Fetch user role and permissions
+        const userPermissions = await User.getUserRoleAndPermissions(user.employee_id);
+
+        if (!userPermissions) {
+            req.flash('error', 'User role or permissions not found.');
+            return res.status(403).redirect('/login');
+        }
+
+        // Store user info and permissions in session
+        req.session.user = {
+            id: user.employee_id,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            profileImage: user.profile_image,
+            role: userPermissions.role,
+            permissions: parseInt(userPermissions.permissions),
+        };
+
+        req.flash('success', `Welcome, ${user.first_name}!`);
+        return res.redirect('/dashboard');
     } catch (error) {
         console.error('Login Error:', error);
         req.flash('error', 'An error occurred. Please try again.');
@@ -115,18 +122,22 @@ export const loginUser = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
     try {
-        const { firstName, lastName, currentPassword, newPassword } = req.body;
-        const userId = req.session.userID;
+        const { userId, firstName, lastName, roleId, currentPassword, newPassword } = req.body;
+        const sessionUser = req.session.user;
+
+        // Determine if the update is self-update or an executive update
+        const isSelfUpdate = !userId || userId === sessionUser.id;
+        const targetUserId = isSelfUpdate ? sessionUser.id : userId;
 
         // Fetch existing user data
-        const existingUser = await User.getUserByEmployeeId(userId);
+        const existingUser = await User.getUserByEmployeeId(targetUserId);
         if (!existingUser) {
             req.flash('error', 'User not found.');
             return res.status(404).redirect('/login');
         }
 
-        // Password update logic
-        if (currentPassword && newPassword) {
+        // Password update logic (only for self-update)
+        if (isSelfUpdate && currentPassword && newPassword) {
             const isMatch = await bcrypt.compare(currentPassword, existingUser.password);
             if (!isMatch) {
                 req.flash('error', 'Current password is incorrect.');
@@ -134,27 +145,60 @@ export const updateProfile = async (req, res) => {
             }
 
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-            await User.updatePassword(userId, hashedNewPassword);
+            await User.updatePassword(targetUserId, hashedNewPassword);
         }
 
-        // Get profile image from req.file if uploaded
+        // Profile image update
         const updatedProfilePic = req.file ? req.file.filename : existingUser.profile_image;
 
         // Use provided values or keep existing values
         const updatedFirstName = firstName || existingUser.first_name;
         const updatedLastName = lastName || existingUser.last_name;
 
-        // Update user profile
-        await User.updateUser(userId, updatedFirstName, updatedLastName, updatedProfilePic);
+        // If an executive is updating another user, allow role change
+        let updatedRole = existingUser.role_id;
+        if (!isSelfUpdate && roleId) {
+            updatedRole = roleId;
+        }
+    
+        // Update user profile and role
+        await User.updateUser(targetUserId, updatedFirstName, updatedLastName, updatedRole, updatedProfilePic);
 
-        req.flash('success', 'Profile updated successfully.');
-        res.redirect('/dashboard/account');
+        req.flash('success', isSelfUpdate ? 'Profile Updated Successfully' : 'User Updated Successfully');
+
+        // Redirect based on who updated
+        return res.redirect(isSelfUpdate ? '/dashboard/account' : '/dashboard/users');
     } catch (error) {
         console.error(error);
-        req.flash('error', 'An error occurred while updating your profile.');
+        req.flash('error', 'An error occurred while updating the profile.');
         res.status(500).redirect('/dashboard/account');
     }
 };
+
+/**
+ * Delete User
+ */
+export const deleteUser = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const sessionUser = req.session.user;
+
+        // Ensure the user is not deleting themselves
+        if (userId === sessionUser.id) {
+            req.flash('error', 'You cannot delete your own account.');
+            return res.status(400).redirect('/dashboard/users');
+        }
+
+        // Proceed with deletion
+        await User.deleteUser(userId);
+        req.flash('success', 'User deleted successfully.');
+        res.status(200).redirect('/dashboard/users');
+    } catch (error) {
+        console.error('Delete User Error:', error);
+        req.flash('error', 'An error occurred while deleting the user.');
+        res.status(500).redirect('/dashboard/users');
+    }
+}
 
 /**
  * Logout User

@@ -59,7 +59,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use('*', (req, res, next) => {
-    res.locals.isUserSignedIn = req.session.userID;
+    res.locals.isUserSignedIn = req.session.user;
     next();
 });
 app.use('/auth', authRoutes);
