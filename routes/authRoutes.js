@@ -20,7 +20,7 @@ router.post('/update-profile',AuthMiddleware.hasPermission(2),upload.single('pro
     handleValidationErrors('/dashboard/account'),
     authController.updateProfile
 );
-router.post('/delete-user', authController.deleteUser);
+router.post('/delete-user', AuthMiddleware.hasPermission(6), authController.deleteUser);
 router.post('/logout', authController.logoutUser);
 router.post('/forgot-password',validateForgotPassword,handleValidationErrors('/forgot-password'),authController.forgotPassword);
 router.post('/reset-password/:token',validateResetPassword,handleValidationErrors('/reset-password/:token'),authController.resetPassword);
