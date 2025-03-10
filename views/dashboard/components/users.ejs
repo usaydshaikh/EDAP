@@ -63,7 +63,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary <%= user.role_id !== 7 ? 'disabled' : '' %>" id="editBtn-<%= user.employee_id %>" onclick="toggleEdit('<%= user.employee_id %>')">
+                                    <button type="button" class="btn btn-sm btn-primary <%= loggedUser.permissions !== 7 ? 'disabled' : '' %>" id="editBtn-<%= user.employee_id %>" onclick="toggleEdit('<%= user.employee_id %>')">
                                         <i id="editIcon-<%= user.employee_id %>" class="fas fa-pencil-alt"></i>
                                     </button>
                                     <button type="submit" class="btn btn-sm btn-success d-none" id="saveBtn-<%= user.employee_id %>">
@@ -76,7 +76,7 @@
                             <form action="/auth/delete-user" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                 <input type="hidden" name="userId" value="<%= user.employee_id %>">
                                 <td>
-                                    <button type="submit" class="btn btn-sm btn-danger <%= user.role_id !== 7 ? 'disabled' : '' %>">
+                                    <button type="submit" class="btn btn-sm btn-danger <%= loggedUser.permissions !== 7 ? 'disabled' : '' %>">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
