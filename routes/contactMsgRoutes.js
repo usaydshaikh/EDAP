@@ -7,5 +7,6 @@ const router = Router();
 // dont forget to add the validation middleware
 router.post('/', validateContactForm, handleValidationErrors('/contact') ,contactMsgController.saveContactMessage);
 router.post('/reply-message/:messageID', validateReplyForm, handleValidationErrors('/dashboard/contact-messages'), contactMsgController.replyToMessage);
+router.post('/delete-message/:messageID', contactMsgController.deleteMessage);
 
 export default router;

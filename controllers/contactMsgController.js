@@ -53,3 +53,18 @@ export const replyToMessage = async (req, res, next) => {
         next(error); // Pass error to the error-handling middleware
     }
 };
+
+// Delete Contact Message
+export const deleteMessage = async (req, res, next) => {
+    try {
+        const { messageID } = req.params;
+
+        await ContactMessage.deleteMessage(messageID);
+
+        req.flash('success', 'Message deleted successfully.');
+        res.redirect('/dashboard/contact-messages');
+    } catch (error) {
+        console.error('Error deleting message:', error);
+        next(error); // Pass error to the error-handling middleware
+    }
+};
