@@ -35,7 +35,7 @@ export const getUsers = async (req, res, next) => {
     let page = parseInt(req.query.page, 10);
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
-    
+
     const loggedUser = req.session.user;
     try {
         const users = await User.getUsers(limit, offset); // gets all users
@@ -47,7 +47,7 @@ export const getUsers = async (req, res, next) => {
             users,
             current: page,
             totalPages,
-            loggedUser,
+            loggedUser
         });
     } catch (error) {
         next(error);
@@ -81,7 +81,8 @@ export const getContactMessages = async (req, res, next) => {
         // Render page
         renderPage(res, 'dashboard/components/contactMessages', {
             messages: updatedMessages,
-            user
+            user,
+            loggedUser
         });
     } catch (error) {
         next(error);

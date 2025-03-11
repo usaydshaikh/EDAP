@@ -49,6 +49,16 @@ class ContactMessage {
             throw new Error('Error updating contact message status: ' + error.message);
         }
     }
+
+    static async deleteMessage(id) {
+        const query = `DELETE FROM contact_messages WHERE id = ?`;
+        try {
+            const db = await getDb();
+            await db.execute(query, [id]);
+        } catch (error) {
+            throw new Error('Error deleting contact message: ' + error.message);
+        }
+    }
 }
 
 export default ContactMessage;
