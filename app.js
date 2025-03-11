@@ -12,6 +12,7 @@ import pageRoutes from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import contactMsgRoutes from './routes/contactMsgRoutes.js';
+import supportRoutes from './routes/supportRoutes.js'; // changes i made
 
 // database connection
 import getDb from './config/db.js';
@@ -65,7 +66,9 @@ app.use('*', (req, res, next) => {
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/contact-message', contactMsgRoutes);
+app.use('/dashboard/support', supportRoutes);// changes i made
 app.use('/', pageRoutes);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

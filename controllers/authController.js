@@ -97,6 +97,7 @@ export const loginUser = async (req, res) => {
 
         if (isMatch) {
             req.session.userID = user.employee_id;
+            req.session.role = user.role;
             req.flash('success', 'Login successful.');
             return res.redirect('/dashboard');
         } else {
