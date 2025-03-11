@@ -42,22 +42,35 @@ class User {
         return db.execute(query, [userId]);
     }
 
-    static async updateUser(employee_id, first_name, last_name, profile_image) {
+    static async updateUser(employee_id, first_name, last_name, role_id, profile_image) {
         const query =
-            'UPDATE users SET first_name = ?, last_name = ?, profile_image = ? WHERE employee_id = ?';
+            'UPDATE users SET first_name = ?, last_name = ?, role_id = ?, profile_image = ? WHERE employee_id = ?';
         try {
             const db = await getDb();
-            await db.execute(query, [first_name, last_name, profile_image, employee_id]);
+            await db.execute(query, [first_name, last_name, role_id, profile_image, employee_id]);
         } catch (error) {
-            console.log('Error updating user:', error);
             throw new Error('Error updating user: ' + error.message);
+        }
+    }
+
+    static async deleteUser(employee_id) {
+        const query = 'DELETE FROM users WHERE employee_id = ?';
+        try {
+            const db = await getDb();
+            await db.execute(query, [employee_id]);
+        } catch (error) {
+            throw new Error('Error deleting user: ' + error.message);
         }
     }
 
     // Fetch all Users with Pagination
     static async getUsers(limit, offset) {
-        const query =
-            'SELECT employee_id, first_name, last_name, email FROM users ORDER BY employee_id DESC LIMIT ? OFFSET ?';
+        const query = `
+            SELECT employee_id, first_name, last_name, email, role_id 
+            FROM users
+            ORDER BY employee_id DESC 
+            LIMIT ? OFFSET ?`;
+
         try {
             const db = await getDb();
             const [users] = await db.query(query, [limit, offset]);
@@ -69,8 +82,10 @@ class User {
 
     // Get selected user
     static async getUserByEmail(email) {
-        const query =
-            'SELECT employee_id, first_name, last_name, email, password, is_active FROM users WHERE email = ?';
+        const query = `
+            SELECT employee_id, first_name, last_name, email, profile_image, password, is_active 
+            FROM users 
+            WHERE email = ?`;
         try {
             const db = await getDb();
             const [[user]] = await db.query(query, [email]);
@@ -79,10 +94,30 @@ class User {
             throw new Error('Error fetching user: ' + error.message);
         }
     }
+
+    static async getUserRoleAndPermissions(employee_id) {
+        const query = `
+            SELECT r.name AS role, 
+                GROUP_CONCAT(rp.permission_code) AS permissions 
+            FROM users u 
+            JOIN roles r ON u.role_id = r.id 
+            LEFT JOIN role_permissions rp ON r.id = rp.role_id 
+            WHERE u.employee_id = ? 
+            GROUP BY u.employee_id;
+        `;
+        try {
+            const db = await getDb();
+            const [[result]] = await db.query(query, [employee_id]);
+            return result || null;
+        } catch (error) {
+            throw new Error('Error fetching role and permissions: ' + error.message);
+        }
+    }
+
     //
     static async getUserByEmployeeId(employee_id) {
         const query =
-            'SELECT employee_id, first_name, last_name, email, password, profile_image FROM users WHERE employee_id = ?';
+            'SELECT employee_id, first_name, last_name, email, password, profile_image, role_id FROM users WHERE employee_id = ?';
         try {
             const db = await getDb();
             const [[user]] = await db.query(query, [employee_id]);

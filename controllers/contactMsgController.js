@@ -27,10 +27,10 @@ export const saveContactMessage = async (req, res, next) => {
 export const replyToMessage = async (req, res, next) => {
     try {
         const { messageID } = req.params;
-        const repliedBy = req.session.userID;
+        const repliedByUser = req.session.user;
         const { replyContent, parentMessageId} = req.body;
 
-        await ContactMessage.markAsReplied(replyContent, parentMessageId, messageID, repliedBy);
+        await ContactMessage.markAsReplied(replyContent, parentMessageId, messageID, repliedByUser.id);
         const message = await ContactMessage.getMessageById(messageID);
 
         // Construct email content using the template

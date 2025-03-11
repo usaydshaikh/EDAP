@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as authController from '../controllers/authController.js';
+import AuthMiddleware from '../middlewares/authMiddleware.js';
 import {
     validateRegistration,
     validateLogin,
@@ -12,12 +13,17 @@ import upload from '../middlewares/uploadMiddleware.js';
 
 const router = Router();
 
-router.post('/register', validateRegistration, handleValidationErrors('/login'), authController.registerUser);
+router.post('/register',validateRegistration,handleValidationErrors('/login'),authController.registerUser);
 router.post('/login', validateLogin, handleValidationErrors('/login'), authController.loginUser);
-router.post('/update-profile', upload.single('profileImage'), validateProfileUpdate, handleValidationErrors('/dashboard/account'), authController.updateProfile);
+router.post('/update-profile',AuthMiddleware.hasPermission(2),upload.single('profileImage'),
+    validateProfileUpdate,
+    handleValidationErrors('/dashboard/account'),
+    authController.updateProfile
+);
+router.post('/delete-user', authController.deleteUser);
 router.post('/logout', authController.logoutUser);
-router.post('/forgot-password', validateForgotPassword, handleValidationErrors('/forgot-password'), authController.forgotPassword);
-router.post('/reset-password/:token', validateResetPassword, handleValidationErrors('/reset-password/:token'), authController.resetPassword);
+router.post('/forgot-password',validateForgotPassword,handleValidationErrors('/forgot-password'),authController.forgotPassword);
+router.post('/reset-password/:token',validateResetPassword,handleValidationErrors('/reset-password/:token'),authController.resetPassword);
 router.get('/confirm-email/:token', authController.confirmEmail);
 
 export default router;
