@@ -1,281 +1,368 @@
-<%- include('partials/_header.ejs') %>
-    <%- include('partials/_navigator.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MaxxEnergy Dark Footer with Clickable Modals</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  >
+  <style>
+    /* Overall dark footer styling */
+    .footer-area {
+      background-color: #343a40;
+      padding: 20px 0;
+      color: #fff;
+      font-size: 14px;
+    }
+    /* Subscription form styling */
+    .subscribe-form {
+      display: flex;
+      max-width: 300px;
+    }
+    .subscribe-form input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #555;
+      border-right: 0;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      background-color: #fff;  /* White background for contrast */
+      color: #000;             /* Dark text for readability */
+    }
+    .subscribe-form button {
+      border: none;
+      background: #212529;
+      color: #fff;
+      padding: 0 12px;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+    /* Social icons styling */
+    .social-icons {
+      display: inline-flex;
+      gap: 0.5rem;
+    }
+    .social-icons a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.25rem;
+      transition: color 0.2s ease;
+    }
+    .social-icons a:hover {
+      color: #adb5bd;
+    }
+    /* Bottom links styling */
+    .bottom-links button {
+      background: none;
+      border: none;
+      color: #fff;
+      margin: 0 0.5rem;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .bottom-links button:hover {
+      color: #adb5bd;
+    }
+    /* Modal styling */
+    .modal-content {
+      border-radius: 0.5rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      background-color: #495057;
+      color: #fff;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
 
-        <style>
-            :root {
-                --hero-height: 100vh;
-                --overlay-start: rgba(0, 0, 0, 0.3);
-                --overlay-end: rgba(0, 0, 0, 0.8);
-                --primary-color: #4e73df;
-                --accent-color: #f6c23e;
-                --transition-speed: 0.5s;
-            }
+<!-- Footer Start -->
+<footer class="footer-area">
+  <div class="container">
+    <!-- Row 1: Subscription, Logo, Social Icons -->
+    <div class="row align-items-center mb-4">
+      <!-- Subscription Form (Left) -->
+      <div class="col-md-4 mb-3 mb-md-0">
+        <div class="subscribe-form">
+          <input type="email" placeholder="Enter your email">
+          <button type="submit">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Logo (Center) -->
+      <div class="col-md-4 text-center mb-3 mb-md-0">
+        <img src="/images/MAXX-Energy-Logo-1B.png" alt="MaxxEnergy Logo" style="max-width: 150px;">
+      </div>
+      <!-- Social Icons (Right) -->
+      <div class="col-md-4 text-md-end text-center">
+        <div class="social-icons">
+          <a href="https://x.com/MaxxTechnology" target="_blank">
+            <i class="bi bi-twitter-x"></i>
+          </a>
+          <a href="https://www.facebook.com/maxxpotentialllc/" target="_blank">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/maxx-potential" target="_blank">
+            <i class="bi bi-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Row 2: Clickable Modal Links Under the Logo -->
+    <div class="row mb-3">
+      <div class="col text-center bottom-links">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#termsModal">Terms</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#aboutModal">About</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#contactModal">Contact</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#careersModal">Careers</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#personalInfoModal">Personal Information Request</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#copyrightModal">Copyright Act</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#policyModal">Policy</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#sitemapModal">Sitemap</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#browserReqModal">Browser Requirements</button>
+      </div>
+    </div>
+    
+    <!-- Row 3: Copyright -->
+    <div class="row">
+      <div class="col text-center">
+        © 2025 MaxxEnergy. All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- Footer End -->
 
-            /* HERO SECTION CONTAINER */
-            .hero-container {
-                position: relative;
-                height: var(--hero-height);
-                overflow: hidden;
-            }
+<!-- Clickable Modals -->
 
-            /* Carousel item (each slide) styling */
-            .hero-carousel-item {
-                position: relative;
-                height: var(--hero-height);
-                background-size: cover;
-                background-position: center;
-            }
+<!-- Terms Modal -->
+<div class="modal fade text-black" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="termsModalLabel">Terms &amp; Conditions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          By using our website, you agree to the terms and conditions outlined herein.
+          Unauthorized use is prohibited.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .hero-carousel-item img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                filter: brightness(0.75);
-                transition: transform 10s ease;
-            }
+<!-- About Modal -->
+<div class="modal fade text-black" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aboutModalLabel">About MaxxEnergy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          MaxxEnergy is dedicated to providing sustainable energy solutions.
+          Our mission is to innovate and deliver eco-friendly energy services.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .hero-carousel-item:hover img {
-                transform: scale(1.05);
-            }
+<!-- Privacy Modal -->
+<div class="modal fade text-black" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          We value your privacy and are committed to protecting your personal information.
+          Our privacy policy explains how we collect, use, and safeguard your data.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            /* Gradient overlay for text readability */
-            .hero-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(180deg, var(--overlay-start) 0%, var(--overlay-end) 100%);
-                z-index: 1;
-            }
+<!-- Contact Modal -->
+<div class="modal fade text-black" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          For inquiries, please email us at 
+          <a href="mailto:info@maxxenergy.com" class="text-decoration-none text-dark">info@maxxenergy.com</a>.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            /* Caption container */
-            .hero-content {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 2;
-                color: #fff;
-                text-align: center;
-                padding: 0 20px;
-            }
+<!-- Careers Modal -->
+<div class="modal fade text-black" id="careersModal" tabindex="-1" aria-labelledby="careersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="careersModalLabel">Careers at MaxxEnergy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Explore career opportunities at MaxxEnergy. Check back later for current openings and application details.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .hero-content h1 {
-                font-size: 4rem;
-                font-weight: bold;
-                margin-bottom: 1rem;
-                animation: fadeInDown 1s ease-out;
-            }
+<!-- Personal Information Request Modal -->
+<div class="modal fade text-black" id="personalInfoModal" tabindex="-1" aria-labelledby="personalInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="personalInfoModalLabel">Personal Information Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          To request your personal information, please contact our support team at 
+          <a href="mailto:privacy@maxxenergy.com" class="text-decoration-none text-dark">privacy@maxxenergy.com</a>.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .hero-content p {
-                font-size: 1.5rem;
-                max-width: 800px;
-                margin: 0 auto 2rem;
-                animation: fadeInUp 1s ease-out 0.5s;
-                animation-fill-mode: both;
-            }
+<!-- Copyright Act Modal -->
+<div class="modal fade text-black" id="copyrightModal" tabindex="-1" aria-labelledby="copyrightModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="copyrightModalLabel">Copyright Act</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Our website respects intellectual property rights. For detailed information, please refer to our Copyright Act documentation.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            /* CTA Buttons Group */
-            .hero-buttons .btn {
-                margin: 0 10px;
-                padding: 1rem 2rem;
-                border: none;
-                border-radius: 50px;
-                font-size: 1rem;
-                transition: background var(--transition-speed);
-            }
+<!-- Policy Modal -->
+<div class="modal fade text-black" id="policyModal" tabindex="-1" aria-labelledby="policyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="policyModalLabel">Policy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Our policies are designed to protect both our users and our organization. For more details, please review our policy documents.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .btn-primary {
-                background-color: var(--primary-color);
-                color: #fff;
-            }
+<!-- Sitemap Modal -->
+<div class="modal fade text-black" id="sitemapModal" tabindex="-1" aria-labelledby="sitemapModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sitemapModalLabel">Sitemap</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Navigate through our website using the sitemap below:
+        </p>
+        <ul>
+          <li>Home</li>
+          <li>About Us</li>
+          <li>Services</li>
+          <li>Careers</li>
+          <li>Contact</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .btn-primary:hover {
-                background-color: #3a5bb8;
-            }
+<!-- Browser Requirements Modal -->
+<div class="modal fade text-black" id="browserReqModal" tabindex="-1" aria-labelledby="browserReqModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="browserReqModalLabel">Browser Requirements</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          For the best browsing experience, please use the latest versions of Chrome, Firefox, Safari, or Edge.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            .btn-secondary {
-                background-color: var(--accent-color);
-                color: #fff;
-            }
-
-            .btn-secondary:hover {
-                background-color: #d9a21a;
-            }
-
-            @keyframes fadeInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            /* Scroll Down Indicator */
-            .scroll-indicator {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 3;
-                cursor: pointer;
-            }
-
-            .scroll-indicator svg {
-                width: 40px;
-                height: 40px;
-                fill: #fff;
-                animation: bounce 2s infinite;
-            }
-
-            @keyframes bounce {
-
-                0%,
-                20%,
-                50%,
-                80%,
-                100% {
-                    transform: translateX(-50%) translateY(0);
-                }
-
-                40% {
-                    transform: translateX(-50%) translateY(-10px);
-                }
-
-                60% {
-                    transform: translateX(-50%) translateY(-5px);
-                }
-            }
-
-            /* Carousel controls styling */
-            .carousel-control-prev-icon,
-            .carousel-control-next-icon {
-                background-color: rgba(0, 0, 0, 0.5);
-                padding: 20px;
-                border-radius: 50%;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .hero-content h1 {
-                    font-size: 2.5rem;
-                }
-
-                .hero-content p {
-                    font-size: 1.25rem;
-                }
-
-                .hero-container {
-                    height: 70vh;
-                }
-            }
-        </style>
-
-        <main class="flex-grow-1">
-            <!-- HERO SECTION -->
-            <section class="hero-container">
-                <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
-                    data-bs-interval="7000" aria-label="Professional Hero Carousel">
-                    <div class="carousel-inner">
-                        <!-- Slide 1 -->
-                        <div class="carousel-item active hero-carousel-item">
-                            <img src="/images/1.jpeg" alt="Professional Energy Generation" loading="lazy">
-                            <div class="hero-overlay"></div>
-                            <div class="hero-content">
-                                <h1 class="animate__animated animate__fadeInDown animate__slow">Empowering Energy
-                                    Solutions</h1>
-                                <p class="animate__animated animate__fadeInUp animate__slower">
-                                    Experience cutting‑edge technology that propels us toward a sustainable future.
-                                </p>
-                                <div class="hero-buttons">
-                                    <a href="/faq"
-                                        class="btn btn-primary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Learn more via FAQ">Learn More</a>
-                                    <a href="/contact"
-                                        class="btn btn-secondary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Contact Us">Contact Us</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Slide 2 -->
-                        <div class="carousel-item hero-carousel-item">
-                            <img src="/images/2.jpeg" alt="Innovative Renewable Energy" loading="lazy">
-                            <div class="hero-overlay"></div>
-                            <div class="hero-content">
-                                <h1 class="animate__animated animate__fadeInDown animate__slow">Innovative Renewable
-                                    Energy</h1>
-                                <p class="animate__animated animate__fadeInUp animate__slower">
-                                    Harness the power of advanced technology to build a cleaner, brighter future.
-                                </p>
-                                <div class="hero-buttons">
-                                    <a href="/faq"
-                                        class="btn btn-primary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Learn more via FAQ">Learn More</a>
-                                    <a href="/contact"
-                                        class="btn btn-secondary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Get in Touch">Get in Touch</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Slide 3 -->
-                        <div class="carousel-item hero-carousel-item">
-                            <img src="/images/3.jpeg" alt="Clean &amp; Green Solutions" loading="lazy">
-                            <div class="hero-overlay"></div>
-                            <div class="hero-content">
-                                <h1 class="animate__animated animate__fadeInDown animate__slow">Clean &amp; Green
-                                    Solutions</h1>
-                                <p class="animate__animated animate__fadeInUp animate__slower">
-                                    Pioneering sustainable practices that set new industry benchmarks.
-                                </p>
-                                <div class="hero-buttons">
-                                    <a href="/faq"
-                                        class="btn btn-primary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Learn more via FAQ">Learn More</a>
-                                    <a href="/contact"
-                                        class="btn btn-secondary animate__animated animate__zoomIn animate__delay-1s"
-                                        aria-label="Reach Out">Reach Out</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Carousel Controls -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
-                        data-bs-slide="prev" aria-label="Previous Slide">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
-                        data-bs-slide="next" aria-label="Next Slide">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <!-- Scroll Down Indicator -->
-                <div class="scroll-indicator"
-                    onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' })">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path
-                            d="M207.029 381.476L12.686 187.132c-12.497-12.497-12.497-32.758 0-45.255l22.627-22.627c12.497-12.497 32.758-12.497 45.255 0L224 284.118l143.432-143.432c12.497-12.497 32.758-12.497 45.255 0l22.627 22.627c12.497 12.497 12.497 32.758 0 45.255L240.971 381.476c-12.497 12.497-32.758 12.497-45.255 0z" />
-                    </svg>
-                </div>
-            </section>
-        </main>
-        <%- include('partials/_footer.ejs') %>
-        
+<!-- Bootstrap JS Bundle with Popper -->
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
+</body>
+</html>
