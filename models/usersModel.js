@@ -2,7 +2,14 @@ import getDb from '../config/db.js';
 
 class User {
     // Register new user
-    static async createUser(first_name,last_name,email,password,confirmation_token,token_expires_at) {
+    static async createUser(
+        first_name,
+        last_name,
+        email,
+        password,
+        confirmation_token,
+        token_expires_at
+    ) {
         const query =
             'INSERT INTO users (first_name, last_name, email, password, confirmation_token, token_expires_at) VALUES (?, ?, ?, ?, ?, ?)';
         try {
@@ -57,16 +64,23 @@ class User {
     }
 
     // Fetch all Users with Pagination
-    static async getUsers(limit, offset) {
-        const query = `
-            SELECT employee_id, first_name, last_name, email, role_id 
-            FROM users
-            ORDER BY employee_id DESC 
-            LIMIT ? OFFSET ?`;
+    static async getUsers(limit, offset, searchQuery = '') {
+        let query = `SELECT employee_id, first_name, last_name, email, role_id FROM users`;
+
+        let queryParams = [];
+
+        if (searchQuery) {
+            query += ` WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? `;
+            const likeSearch = `%${searchQuery}%`;
+            queryParams.push(likeSearch, likeSearch, likeSearch);
+        }
+
+        query += ` ORDER BY employee_id DESC LIMIT ? OFFSET ?`;
+        queryParams.push(limit, offset);
 
         try {
             const db = await getDb();
-            const [users] = await db.query(query, [limit, offset]);
+            const [users] = await db.query(query, queryParams);
             return users;
         } catch (error) {
             throw new Error('Error fetching users: ' + error.message);
@@ -121,11 +135,19 @@ class User {
     }
 
     // Get Total User Count
-    static async getTotalUserCount() {
-        const query = 'SELECT COUNT(*) AS count FROM users';
+    static async getTotalUserCount(searchQuery = '') {
+        let query = 'SELECT COUNT(*) AS count FROM users';
+        let queryParams = [];
+
+        if (searchQuery) {
+            query += ` WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? `;
+            const likeSearch = `%${searchQuery}%`;
+            queryParams.push(likeSearch, likeSearch, likeSearch);
+        }
+
         try {
             const db = await getDb();
-            const [[{ count }]] = await db.query(query);
+            const [[{ count }]] = await db.query(query, queryParams);
             return count;
         } catch (error) {
             throw new Error('Error fetching user count: ' + error.message);

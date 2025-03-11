@@ -25,10 +25,12 @@ export const getUsers = async (req, res, next) => {
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
 
+    const searchQuery = req.query.search ? req.query.search.trim() : ''; // Get the search term
     const loggedUser = req.session.user;
+
     try {
-        const users = await User.getUsers(limit, offset); // gets all users
-        const totalUsers = await User.getTotalUserCount(); // total count of users
+        const users = await User.getUsers(limit, offset, searchQuery);
+        const totalUsers = await User.getTotalUserCount(searchQuery); // Modify this function to consider search
         const totalPages = Math.ceil(totalUsers / limit);
         page = Math.min(page, totalPages || 1); // Ensure valid page number
 
@@ -36,7 +38,8 @@ export const getUsers = async (req, res, next) => {
             users,
             current: page,
             totalPages,
-            loggedUser
+            loggedUser,
+            searchQuery,
         });
     } catch (error) {
         next(error);
@@ -75,7 +78,10 @@ export const getAccount = async (req, res, next) => {
         const user = await User.getUserByEmployeeId(loggedUser.id);
 
         // Ensure a valid profile image path for rendering
-        if (!user.profile_image || !fs.existsSync(path.join('public', 'uploads', user.profile_image))) {
+        if (
+            !user.profile_image ||
+            !fs.existsSync(path.join('public', 'uploads', user.profile_image))
+        ) {
             user.profile_image = 'profile.png'; // Fallback to default image
         }
 
