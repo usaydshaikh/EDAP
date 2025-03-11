@@ -1,24 +1,134 @@
-<footer class="bg-dark text-white text-center py-4 mt-auto">
+<footer class="bg-dark text-center text-white py-4 mt-auto">
     <div class="container">
         <div class="d-flex justify-content-center gap-3 mb-3">
-            <a href="https://www.facebook.com/maxxpotentialllc/" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
-            <a href="https://x.com/MaxxTechnology" class="text-white fs-4"><i class="bi bi-twitter-x"></i></a>
-            <a href="https://www.linkedin.com/company/maxx-potential/" class="text-white fs-4"><i class="bi bi-linkedin"></i></a>
+            <a target="_blank" class="text-white fs-4" href="https://www.facebook.com/maxxpotentialllc/"><i class="bi bi-facebook"></i></a>
+            <a target="_blank" class="text-white fs-4" href="https://x.com/MaxxTechnology"><i class="bi bi-twitter-x"></i></a>
+            <a target="_blank" class="text-white fs-4" href="https://www.linkedin.com/company/maxx-potential/"><i class="bi bi-linkedin"></i></a>
         </div>
         <div class="footer-bottom">
-            <ul class="list-inline mb-2">
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Terms &
-                        Conditions</a></li>
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Privacy Notice</a>
-                </li>
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Personal
-                        Information Request</a></li>
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Copyright Act
-                        Policy</a></li>
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Sitemap</a></li>
-                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Browser
-                        Requirements</a></li>
-            </ul>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#privacyModal" data-bs-whatever="@mdo">Privacy Notice</button>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#termsModal" data-bs-whatever="@fat">Terms & Conditions</button>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#personalModal" data-bs-whatever="@getbootstrap">Personal Information Request</button>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#copyrightModal" data-bs-whatever="@mdo">Copyright Act Policy</button>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#sitemapModal" data-bs-whatever="@mdo">Sitemap</button>
+            <button type="button" class="btn btn-outline-dark text-white" data-bs-toggle="modal" data-bs-target="#requirementModal" data-bs-whatever="@mdo">Browser Requirements</button>
+
+            <div class="modal fade text-black" id="privacyModal" tabindex="-1" aria-labelledby="privacyModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="privacyModal">Privacy Notice</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Laboriosam, totam vitae reprehenderit ullam, nemo eaque maiores provident debitis ad ipsam dolor,
+                        vero ratione eos perferendis ducimus odit aperiam unde? Pariatur.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+              
+            <div class="modal fade text-black" id="termsModal" tabindex="-1" aria-labelledby="termsModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="termsModal">Terms & Conditions</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Odio, officia voluptatem vero consequatur temporibus eveniet assumenda nihil unde dolores,
+                      dignissimos optio delectus harum cum amet quidem exercitationem asperiores obcaecati nemo!
+                      Necessitatibus reiciendis eius voluptas harum ut iusto laborum distinctio id deleniti nostrum commodi iure maiores quos,
+                      numquam architecto maxime consectetur quisquam cupiditate quasi at beatae eligendi!
+                      Reprehenderit natus velit omnis reiciendis optio nihil tenetur molestiae suscipit in sequi saepe similique qui nam itaque,
+                      mollitia beatae, provident ullam consectetur fuga ratione odio porro accusantium quae. Reiciendis, fugiat illum.
+                      Consequatur tempore incidunt quidem consectetur laudantium! Nam ex</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade text-black" id="personalModal" tabindex="-1" aria-labelledby="personalModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="personalModal">Personal Information Request</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Laboriosam, totam vitae reprehenderit ullam, nemo eaque maiores provident debitis ad ipsam dolor,
+                        vero ratione eos perferendis ducimus odit aperiam unde? Pariatur.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade text-black" id="copyrightModal" tabindex="-1" aria-labelledby="copyrightModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="copyrightModal">Copyright Act Policy</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Laboriosam, totam vitae reprehenderit ullam, nemo eaque maiores provident debitis ad ipsam dolor,
+                        vero ratione eos perferendis ducimus odit aperiam unde? Pariatur.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade text-black" id="sitemapModal" tabindex="-1" aria-labelledby="sitemapModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="sitemapModal">SiteMap</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Laboriosam, totam vitae reprehenderit ullam, nemo eaque maiores provident debitis ad ipsam dolor,
+                        vero ratione eos perferendis ducimus odit aperiam unde? Pariatur.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade text-black" id="requirementModal" tabindex="-1" aria-labelledby="requirementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="requirementModal">Browser Requirements</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium blanditiis aspernatur repellat, ratione rerum possimus similique velit officiis unde repudiandae id. Ducimus accusamus harum eius doloribus odit sint modi iste.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <p class="mb-0">&copy; 2025 Maxx Energy. All rights reserved.</p>
         </div>
     </div>

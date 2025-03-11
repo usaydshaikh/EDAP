@@ -1,18 +1,330 @@
-<? if (isUserSignedIn) { ?>
-<%- include('../dashboardPartials/_dashboardHeader.ejs') %>
+<% if (isUserSignedIn) { %>
+    <%- include('../dashboardPartials/_dashboardHeader.ejs') %>
+        <style>
+            /* Minimal custom styling, relying more on Bootstrap */
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
 
-    <div class="container mt-5 table-responsive">
-        <h2 class="text-center">Your Account Settings</h2>
+            /* Success Overlay */
+            #successOverlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 2rem;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.5s, visibility 0.5s;
+                z-index: 9999;
+            }
 
+            /* Email field styling to indicate it's always locked */
+            #email {
+                background-color: #f8f9fa;
+                cursor: not-allowed;
+            }
 
+            /* Profile picture overlay */
+            .profile-picture-container {
+                position: relative;
+                width: 120px;
+                height: 120px;
+                margin: 0 auto;
+                margin-bottom: 1rem;
+            }
 
+            .profile-pic-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s;
+                color: white;
+                cursor: pointer;
+            }
 
+            .profile-picture-container:hover .profile-pic-overlay {
+                opacity: 1;
+            }
 
+            /* Hide file input visually but keep it accessible */
+            #profileImageInput {
+                position: absolute;
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                z-index: -1;
+            }
 
+            /* Mobile adjustments */
+            @media (max-width: 768px) {
+                #toggleEditBtn {
+                    position: fixed !important;
+                    bottom: 20px;
+                    right: 20px;
+                    top: auto !important;
+                    z-index: 100;
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                }
 
-    </div>
+                #toggleEditBtn span {
+                    display: none;
+                }
 
+                #toggleEditBtn i {
+                    font-size: 1.5rem;
+                }
+            }
+        </style>
 
+        <!-- Container -->
+        <div class="container py-4">
+            <h1 class="text-center mb-4">Your Account Settings</h1>
 
-<%- include('../dashboardPartials/_dashboardFooter.ejs') %>
-<? } ?>
+            <!-- Center the card -->
+            <div class="row justify-content-center">
+                <% if (messages.success) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 1050;">
+                        <%= messages.success %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+    
+                <% if (messages.error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="z-index: 1050;">
+                        <%= messages.error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+
+                <form id="profileForm" method="post" action="/auth/update-profile" enctype="multipart/form-data">
+                    <!-- Card Header: Profile Pic and Name -->
+                    <div class="card-header text-center position-relative bg-white pt-4">
+                        <!-- Profile Picture with Edit Overlay -->
+                        <div class="profile-picture-container">
+                            <img id="profileImagePreview" src="/uploads/<%= user.profile_image || 'profile.png' %>" 
+                                alt="Profile Picture" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+
+                            <label for="profileImageInput" class="profile-pic-overlay" id="profilePicOverlay" style="display: none;">
+                                <i class="bi bi-camera-fill"></i>
+                            </label>
+                            <input type="file" id="profileImageInput" name="profileImage" accept="image/*">
+                        </div>
+
+                        <!-- Displayed User Name -->
+                        <div id="userNameDisplay" class="mb-3 fs-4 fw-semibold text-capitalize">
+                            <%= user.first_name %>
+                            <%= user.last_name %>
+                        </div>
+
+                        <!-- Edit / Save Button with Icons -->
+                        <button type="button" id="toggleEditBtn" class="btn btn-primary position-absolute"
+                            style="top: 10px; right: 10px;">
+                            <i class="bi bi-pencil-fill d-md-inline"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+
+                    <!-- Card Body: Form Fields -->
+                    <div class="card-body px-4">
+                        <!-- Form Elements -->
+                        <div class="row">
+                            <!-- First Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="form-control"
+                                    value="<%= user.first_name %>" disabled required
+                                    style="text-transform: capitalize;">
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="form-control"
+                                    value="<%= user.last_name %>" disabled required style="text-transform: capitalize;">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email <small class="text-muted">(Cannot be
+                                    changed)</small></label>
+                            <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>"
+                                disabled required readonly>
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="my-4">
+                        <div class="mb-3">
+                            <h5>Change Password</h5>
+                            <p class="text-muted small">Leave these fields empty if you don't want to change your
+                                password</p>
+                        </div>
+
+                        <!-- Current Password with Toggle -->
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" id="currentPassword" name="currentPassword" class="form-control"
+                                    placeholder="Enter your current password" readonly>
+                                <span class="input-group-text" style="cursor: pointer;"
+                                    onclick="togglePassword('currentPassword', this)">
+                                    <i class="bi bi-eye-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- New Password with Toggle -->
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input type="password" id="newPassword" name="newPassword" class="form-control"
+                                    placeholder="Enter new password" readonly>
+                                <span class="input-group-text" style="cursor: pointer;"
+                                    onclick="togglePassword('newPassword', this)">
+                                    <i class="bi bi-eye-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password with Toggle -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                                    placeholder="Confirm new password" readonly>
+                                <span class="input-group-text" style="cursor: pointer;"
+                                    onclick="togglePassword('confirmPassword', this)">
+                                    <i class="bi bi-eye-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        <%- include('../dashboardPartials/_dashboardFooter.ejs') %>
+
+            <!-- Simplified Profile Management Script -->
+            <script>
+                let editingMode = false;
+                const toggleEditBtn = document.getElementById('toggleEditBtn');
+                const formInputs = document.querySelectorAll('#profileForm input');
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                const profileForm = document.getElementById('profileForm');
+                const profilePicOverlay = document.getElementById('profilePicOverlay');
+                const profileImageInput = document.getElementById('profileImageInput');
+                const profileImagePreview = document.getElementById('profileImagePreview');
+
+                // Preview profile image when selected
+                profileImageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            profileImagePreview.src = e.target.result;
+                        }
+                        
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+
+                // Toggle editing mode on button click
+                toggleEditBtn.addEventListener('click', () => {
+                    if (!editingMode) {
+                        // Enable editing mode
+                        editingMode = true;
+                        toggleEditBtn.innerHTML = '<i class="bi bi-check-lg d-md-inline"></i><span>Save Changes</span>';
+                        toggleEditBtn.classList.remove('btn-primary');
+                        toggleEditBtn.classList.add('btn-success');
+                        profilePicOverlay.style.display = 'flex';
+
+                        // Enable form fields except email
+                        formInputs.forEach(input => {
+                            if (input.id === 'email') return;
+
+                            if (input.type === 'password') {
+                                input.removeAttribute('readonly');
+                            } else if (input.type !== 'hidden' && input.type !== 'file') {
+                                input.disabled = false;
+                            }
+                        });
+                    } else {
+                        // Submit the form to backend
+                        profileForm.submit();
+
+                        // Reset UI
+                        editingMode = false;
+                        toggleEditBtn.innerHTML = '<i class="bi bi-pencil-fill d-md-inline"></i><span>Edit</span>';
+                        toggleEditBtn.classList.remove('btn-success');
+                        toggleEditBtn.classList.add('btn-primary');
+                        profilePicOverlay.style.display = 'none';
+                    }
+                });
+                // Toggle password visibility function
+                function togglePassword(inputId, iconSpan) {
+                    const input = document.getElementById(inputId);
+                    const icon = iconSpan.querySelector('i');
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye-fill');
+                        icon.classList.add('bi-eye-slash-fill');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash-fill');
+                        icon.classList.add('bi-eye-fill');
+                    }
+                }
+
+                // Keyboard shortcut - Escape to cancel editing
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && editingMode) {
+                        // Reset the form
+                        profileForm.reset();
+                        
+                        // Reset profile image preview to original
+                        profileImagePreview.src = "/uploads/<%= user.profile_image || 'profile.png' %>";
+
+                        // Exit edit mode
+                        editingMode = false;
+                        toggleEditBtn.innerHTML = '<i class="bi bi-pencil-fill d-md-inline"></i><span>Edit</span>';
+                        toggleEditBtn.classList.remove('btn-success');
+                        toggleEditBtn.classList.add('btn-primary');
+                        profilePicOverlay.style.display = 'none';
+
+                        // Disable all form fields
+                        formInputs.forEach(input => {
+                            if (input.type === 'password') {
+                                input.setAttribute('readonly', true);
+                            } else if (input.type !== 'hidden' && input.type !== 'file') {
+                                input.disabled = true;
+                            }
+                        });
+                    }
+                });
+            </script>
+            <% } %>

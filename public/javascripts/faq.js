@@ -1,5 +1,5 @@
 
-function searchFAQ() {
+function search() {
     const searchIn = document.getElementById("search").value.toLowerCase();
     const faqs = document.querySelectorAll(".accordion-item");
     
@@ -17,23 +17,19 @@ function searchFAQ() {
             noResults=false;
         } else {
             faq.style.display = "none";
-            noResults=true;
         }
-    }
-});
-    const noResultsMsg = document.getElementById("noResultsMsg");
-if (noResults) {
-    if (!noResultsMsg) {
-        const msg = document.createElement("x");
-        msg.id = "noResultsMsg";
-        msg.style.color = "gray";
-        msg.textContent = "No results found.";
-        noresults.appendChild(msg);
-    }
-} else {
-    if (noResultsMsg) {
-        noResultsMsg.remove();
-        }
-}
-}
+    });
 
+    let noResultsMsg = document.getElementById('noResultsMsg');
+    if (!hasResults) {
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement('h1');
+            noResultsMsg.id = 'noResultsMsg';
+            noResultsMsg.style.color = 'gray';
+            noResultsMsg.textContent = 'No Results Found.';
+            noresults.appendChild(noResultsMsg);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
+    }
+}
