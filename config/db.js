@@ -73,7 +73,5 @@ const getDb = async () => {
     return db;
 };
 
-
-
 // Export the connection getter function
 export default getDb;

@@ -1,7 +1,7 @@
 /**
  * flash message timeout function
  */
-setTimeout(function() {
+setTimeout(function () {
     const alert = document.querySelector('.alert');
     if (alert) {
         alert.style.transition = 'opacity 0.5s ease-out';

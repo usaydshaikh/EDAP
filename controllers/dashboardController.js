@@ -27,13 +27,6 @@ export const getUsers = async (req, res, next) => {
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
 
-//search functionality
-const search = req.query.search;
-console.log(search);
-
-
-
-
     const userID = req.session.userID;
     try {
         const user = await User.getUserByEmployeeId(userID); // logged in user

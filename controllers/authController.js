@@ -21,30 +21,18 @@ export const registerUser = async (req, res) => {
 
         // Generate confirmation token and expiry
         const confirmationToken = crypto.randomBytes(32).toString('hex');
-        const tokenExpiryUTC = new Date(Date.now() + 24 * 60 * 60 * 1000)
-            .toISOString()
-            .slice(0, 19)
-            .replace('T', ' '); // Convert to MySQL DATETIME format
+        // Convert to MySQL DATETIME format - 24 hours
+        const tokenExpiryUTC = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '); 
 
         // Create user in database
-        await User.createUser(
-            req.body.firstName,
-            req.body.lastName,
-            req.body.email.toLowerCase(),
-            hashedPassword,
-            confirmationToken,
-            tokenExpiryUTC
-        );
+        await User.createUser(req.body.firstName, req.body.lastName, req.body.email, hashedPassword, confirmationToken, tokenExpiryUTC);
 
         // Send confirmation email
         const confirmUrl = `http://localhost:3000/auth/confirm-email/${confirmationToken}`;
         const emailContent = emailTemplate.confirmationTemplate(confirmUrl);
         await sendEmail(req.body.email.toLowerCase(), 'Confirm Your Email', emailContent);
 
-        req.flash(
-            'success',
-            'Account created successfully. Please check your email to confirm your account.'
-        );
+        req.flash('success', 'Account created successfully. Please check your email to confirm your account.');
         res.status(201).redirect('/login');
     } catch (error) {
         console.error('Register User Error:', error);
