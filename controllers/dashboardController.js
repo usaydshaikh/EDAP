@@ -49,7 +49,8 @@ export const getUsers = async (req, res, next) => {
 // Contact Messages
 export const getContactMessages = async (req, res, next) => {
     try {
-        const user = req.session.user;
+        const loggedUser = req.session.user;
+        const user = await User.getUserByEmployeeId(loggedUser.id);
         let messages = (await ContactMessage.getAllMessages()) || [];
 
         // Format timestamps without modifying user_id
