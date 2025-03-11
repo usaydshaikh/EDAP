@@ -1,6 +1,3 @@
-
-console.log('getUsers.js is loaded');
-
 const form = document.getElementById('userSearch');
 document.addEventListener('DOMContentLoaded', function () {
     console.log('Script loaded and DOM ready');
@@ -16,16 +13,17 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
         const query = searchInput.value;
+    
 
         try {
-            const response = await fetch(`/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`/users/search?query=${encodeURIComponent(query)}`);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`error1: ${response.status}`);
             }
             const data = await response.json();
             displayResults(data);
         } catch (error) {
-            console.error('Error fetching search results:', error);
+            console.error('error2:', error);
         }
     });
 });

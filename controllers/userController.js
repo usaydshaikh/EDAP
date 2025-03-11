@@ -1,18 +1,12 @@
 import db from '../config/db.js';
 
+
 export async function searchUsers(req, res) {
   const query = req.query.query || '';
   const limit = 10;
   const page = parseInt(req.query.page) || 1; 
   const offset = (page - 1) * limit; 
-  try {
-    const [testResult] = await db.execute('SELECT 1 + 1 AS solution');
-    console.log('Database connection test result:', testResult);
-} catch (err) {
-    console.error('Database connection failed:', err);
-    res.status(500).send('Database connection error');
-    return;
-}
+  
   try {
 
     const [users] = await db.execute(
