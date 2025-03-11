@@ -66,19 +66,36 @@ export const validateContactForm = [
  * Validation rules for updating user profile
  */
 export const validateProfileUpdate = [
-    body('firstName').optional().trim().isLength({ min: 2 }).withMessage('First name must be at least 2 characters long'),
-    body('lastName').optional().trim().isLength({ min: 2 }).withMessage('Last name must be at least 2 characters long'),
-    body('currentPassword').optional({values: 'falsy'}).isLength({ min: 6 }).withMessage('Current password must be at least 6 characters long'),
-    body('newPassword').optional({values: 'falsy',}).isLength({ min: 6 }).withMessage('New password must be at least 6 characters long'),
+    body('firstName')
+        .optional()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('First name must be at least 2 characters long'),
+    body('lastName')
+        .optional()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('Last name must be at least 2 characters long'),
+    body('currentPassword')
+        .optional({ values: 'falsy' })
+        .isLength({ min: 6 })
+        .withMessage('Current password must be at least 6 characters long'),
+    body('newPassword')
+        .optional({ values: 'falsy' })
+        .isLength({ min: 6 })
+        .withMessage('New password must be at least 6 characters long'),
     body('confirmPassword')
-        .optional({values: 'falsy'})
+        .optional({ values: 'falsy' })
         .custom((value, { req }) => {
             if (value && value !== req.body.newPassword) {
                 throw new Error('New passwords do not match');
             }
             return true;
         }),
-    body('profileImage').optional().isIn(['true', 'false']).withMessage('Invalid value for profilePicChanged'),
+    body('profileImage')
+        .optional()
+        .isIn(['true', 'false'])
+        .withMessage('Invalid value for profilePicChanged'),
 ];
 
 /**

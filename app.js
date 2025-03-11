@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import express, {urlencoded } from 'express';
+import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
 import logger from 'morgan';
@@ -8,11 +8,11 @@ import session from 'express-session';
 import 'dotenv/config';
 import { errorHandler } from './middlewares/errorHandler.js';
 
-import pageRoutes from './routes/pagesRoute.js';
+// Routes
+import indexRouter from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import contactMsgRoutes from './routes/contactMsgRoutes.js';
-import supportRoutes from './routes/supportRoutes.js'; // changes i made
 
 // database connection
 import getDb from './config/db.js';
@@ -63,17 +63,15 @@ app.use('*', (req, res, next) => {
     res.locals.isUserSignedIn = req.session.userID;
     next();
 });
-app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/contact-message', contactMsgRoutes);
-app.use('/dashboard/support', supportRoutes);// changes i made
-app.use('/', pageRoutes);
-
+app.use('/auth', authRoutes);
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
     next(createError(404));
-});
+}); 
 
 // error handler
 app.use((err, req, res, next) => {

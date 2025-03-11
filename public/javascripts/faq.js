@@ -1,18 +1,22 @@
 function search() {
-    const searchInput = document.getElementById('search').value.trim().toLowerCase();
+    const searchIn = document.getElementById('search').value.toLowerCase();
     const faqs = document.querySelectorAll('.accordion-item');
-    const noresults = document.getElementById('noresults');
     let hasResults = false;
 
     faqs.forEach((faq) => {
-        const question = faq.querySelector('.accordion-button')?.textContent.toLowerCase() || "";
-        const answer = faq.querySelector('.accordion-body')?.textContent.toLowerCase() || "";
+        const q = faq.querySelector('.accordion-button');
+        const a = faq.querySelector('.accordion-body');
 
-        if (question.includes(searchInput) || answer.includes(searchInput)) {
-            faq.style.display = "";
-            hasResults = true;
-        } else {
-            faq.style.display = "none";
+        if (q && a) {
+            const question = q.textContent.toLowerCase();
+            const answer = a.textContent.toLowerCase();
+
+            if (question.includes(searchIn) || answer.includes(searchIn)) {
+                faq.style.display = 'block';
+                hasResults = true;
+            } else {
+                faq.style.display = 'none';
+            }
         }
     });
 
@@ -23,7 +27,7 @@ function search() {
             noResultsMsg.id = 'noResultsMsg';
             noResultsMsg.style.color = 'gray';
             noResultsMsg.textContent = 'No Results Found.';
-            noresults.appendChild(noResultsMsg);
+            document.body.appendChild(noResultsMsg); // Append to an appropriate container
         }
     } else if (noResultsMsg) {
         noResultsMsg.remove();
