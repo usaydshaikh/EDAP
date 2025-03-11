@@ -18,15 +18,6 @@ export const getDashboard = async (req, res, next) => {
     }
 };
 
-// Performance
-export const getPerformance = async (req, res, next) => {
-    try {
-        renderPage(res, 'dashboard/components/performance');
-    } catch (error) {
-        next(error);
-    }
-};
-
 // Users with pagination
 export const getUsers = async (req, res, next) => {
     const limit = 10;
@@ -47,15 +38,6 @@ export const getUsers = async (req, res, next) => {
             totalPages,
             loggedUser
         });
-    } catch (error) {
-        next(error);
-    }
-};
-
-// Support
-export const getSupport = async (req, res, next) => {
-    try {
-        renderPage(res, 'dashboard/components/support');
     } catch (error) {
         next(error);
     }

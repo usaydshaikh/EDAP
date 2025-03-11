@@ -21,13 +21,11 @@
             </div>
         </a>
         <a href="/dashboard">Dashboard</a>
-        <a href="/dashboard/performance">Performance</a>
-        <a href="/dashboard/support">Support</a>
         <a href="/dashboard/users" class="<%= (isUserSignedIn.permissions >= 6) ? '' : 'd-none' %>">Users</a>
-        <a href="/dashboard/contact-messages" class="<%= (isUserSignedIn.permissions >= 6) ? '' : 'd-none' %>">Customer Inquiries</a>
+        <a href="/dashboard/contact-messages" class="<%= (isUserSignedIn.permissions >= 6) ? '' : 'd-none' %>">Customer
+            Inquiries</a>
         <a href="/dashboard/account">Account</a>
     </div>
-
     <!-- Main Content -->
     <div class="content" id="mainContent">
         <!-- Navbar -->
@@ -42,15 +40,33 @@
                     <img src="<%= user.profile_image_url %>" class="rounded-circle img-fluid" alt="Profile"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 </a>
-                <form action="/auth/logout" method="POST"
-                    onsubmit="return confirm('Are you sure you want to log out?');">
-                    <button type="submit" title="Log Out" aria-label="Log out" class="btn btn-logout">
-                        <span class="text-dark"><i class="fa fa-sign-out-alt"></i></span>
-                    </button>
-                </form>
+                <button type="button" title="Log Out" aria-label="Log out" class="btn btn-logout" data-bs-toggle="modal"
+                    data-bs-target="#logoutModal">
+                    <span class="text-dark"><i class="fa fa-sign-out-alt"></i></span>
+                </button>
             </div>
         </nav>
 
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/auth/logout" method="POST" class="m-0">
+                            <button type="submit" class="btn btn-primary">Log Out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Toast Container for flash message - Start  -->
         <div id="toast-container" class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 1050;">
@@ -67,7 +83,6 @@
                 </div>
                 <% } %>
         </div>
-
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const toastElement = document.getElementById('feedback-toast');
