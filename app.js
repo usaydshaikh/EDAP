@@ -11,6 +11,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import indexRouter from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import userRoutes from './routes/users.js';
 
 // database connection
 import getDb from './config/db.js';
@@ -64,14 +65,14 @@ app.use('*', (req, res, next) => {
 app.use('/dashboard', dashboardRoutes);
 app.use('/auth', authRoutes);
 app.use('/', indexRouter);
+app.use('/api/users', userRoutes);
 
-app.listen(8080);
-console.log('Server is listening on port 8080');
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
     next(createError(404));
-});
+}); 
 
 // error handler
 app.use((err, req, res, next) => {
@@ -84,7 +85,14 @@ app.use((err, req, res, next) => {
     res.render('error');
 });
 
+
 // Global Error Handler
 app.use(errorHandler);
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
+
+  
 
 export default app;

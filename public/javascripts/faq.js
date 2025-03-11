@@ -1,5 +1,5 @@
 
-function search() {
+function searchFAQ() {
     const searchIn = document.getElementById("search").value.toLowerCase();
     const faqs = document.querySelectorAll(".accordion-item");
     

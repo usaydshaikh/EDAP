@@ -1,9 +1,19 @@
-<? if (isUserSignedIn) { ?>
+<? if (isUserSignedIn) { ?> 
 <%- include('../dashboardPartials/_dashboardHeader.ejs') %>
+
 
     <div class="container mt-5 table-responsive">
         <h2 class="text-center">User List</h2>
-        <table class="table table-bordered table-striped">
+        
+        <form id="userSearch">
+            <input type="text" id="searchQuery" name="query" placeholder="Search users...">
+            <button type="submit">Search</button>
+        </form>
+        <body>
+            <script src="/javascripts/getUsers.js"></script>
+        </body>
+
+        <table class="table table-bordered table-striped" id="userList">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -32,6 +42,8 @@
                     <% }); %>
             </tbody>
         </table>
+
+        $()
 
         <!-- Pagination -->
         <nav aria-label="Page navigation">
@@ -85,6 +97,8 @@
                 <% } %>
         </nav>
 
+          
+        
     </div>
     </div>
 
