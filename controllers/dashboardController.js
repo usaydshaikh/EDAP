@@ -4,6 +4,7 @@ import moment from 'moment';
 import User from '../models/usersModel.js';
 import ContactMessage from '../models/contactMsgModel.js';
 import exp from 'constants';
+import { log } from 'console';
 
 // Utility function for rendering pages
 const renderPage = (res, page, data = {}) => {
@@ -34,7 +35,8 @@ export const getUsers = async (req, res, next) => {
     let page = parseInt(req.query.page, 10);
     page = isNaN(page) || page < 1 ? 1 : page;
     const offset = (page - 1) * limit;
-
+    
+    const loggedUser = req.session.user;
     try {
         const users = await User.getUsers(limit, offset); // gets all users
         const totalUsers = await User.getTotalUserCount(); // total count of users
@@ -45,6 +47,7 @@ export const getUsers = async (req, res, next) => {
             users,
             current: page,
             totalPages,
+            loggedUser,
         });
     } catch (error) {
         next(error);
@@ -63,8 +66,7 @@ export const getSupport = async (req, res, next) => {
 // Contact Messages
 export const getContactMessages = async (req, res, next) => {
     try {
-        const loggedUser = req.session.user;
-        const user = await User.getUserByEmployeeId(loggedUser.id);
+        const user = req.session.user;
         let messages = (await ContactMessage.getAllMessages()) || [];
 
         // Format timestamps without modifying user_id

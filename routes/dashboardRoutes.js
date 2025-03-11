@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import * as dashboardController from '../controllers/dashboardController.js';
 import AuthMiddleware from '../middlewares/authMiddleware.js';
+import checkProfileImage from '../middlewares/checkProfileImage.js';
 
 const router = Router();
 
 // Apply authentication middleware to all dashboard routes
 router.use(AuthMiddleware.isAuthenticated);
+router.use(checkProfileImage);
 
 /**
  * hasPermission middleware: checks the required permission for each route.
