@@ -2,14 +2,7 @@ import getDb from '../config/db.js';
 
 class User {
     // Register new user
-    static async createUser(
-        first_name,
-        last_name,
-        email,
-        password,
-        confirmation_token,
-        token_expires_at
-    ) {
+    static async createUser(first_name,last_name,email,password,confirmation_token,token_expires_at) {
         const query =
             'INSERT INTO users (first_name, last_name, email, password, confirmation_token, token_expires_at) VALUES (?, ?, ?, ?, ?, ?)';
         try {

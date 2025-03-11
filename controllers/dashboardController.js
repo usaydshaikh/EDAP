@@ -3,8 +3,6 @@ import fs from 'fs';
 import moment from 'moment';
 import User from '../models/usersModel.js';
 import ContactMessage from '../models/contactMsgModel.js';
-import exp from 'constants';
-import { log } from 'console';
 
 // Utility function for rendering pages
 const renderPage = (res, page, data = {}) => {
@@ -82,7 +80,6 @@ export const getContactMessages = async (req, res, next) => {
         renderPage(res, 'dashboard/components/contactMessages', {
             messages: updatedMessages,
             user,
-            loggedUser
         });
     } catch (error) {
         next(error);
