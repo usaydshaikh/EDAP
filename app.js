@@ -12,6 +12,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import indexRouter from './routes/pagesRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import contactMsgRoutes from './routes/contactMsgRoutes.js';
 
 // database connection
 import getDb from './config/db.js';
@@ -63,6 +64,7 @@ app.use('*', (req, res, next) => {
     next();
 });
 app.use('/dashboard', dashboardRoutes);
+app.use('/contact-message', contactMsgRoutes);
 app.use('/auth', authRoutes);
 app.use('/', indexRouter);
 
